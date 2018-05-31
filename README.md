@@ -1,32 +1,31 @@
-# nPYc Toolbox <img src="nPYc/Templates/toolbox_logo.png" width="200" height="200" align="right" />
+# ISTOCSY
 
 [![Build Status](https://travis-ci.org/phenomecentre/nPYc-Toolbox.svg?branch=master)](https://travis-ci.org/phenomecentre/nPYc-Toolbox) [![Documentation Status](https://readthedocs.org/projects/npyc-toolbox/badge/?version=latest)](http://npyc-toolbox.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/phenomecentre/nPYc-Toolbox/branch/master/graph/badge.svg)](https://codecov.io/gh/phenomecentre/nPYc-Toolbox) ![Python36](https://img.shields.io/badge/python-3.6-blue.svg) [![PyPI](https://img.shields.io/pypi/v/nPYc.svg)](https://pypi.org/project/nPYc/)
 
-* Version 1.0.4
+* Version 1.0.0
 
-A Python implementation of the [NPC](http://phenomecentre.org) toolchain for the import, quality-control, and preprocessing of metabolic profiling datasets.
+ISTOCSY is a python library for interactively exploring the correlations between features in mass spectrometry datasets.
 
 Imports:
  - Peak-picked LC-MS data (XCMS, Progenesis QI)
- - Raw NMR spectra (Bruker format)
- - Targeted datasets (TargetLynx, Bruker BI-LISA & BI-Quant-Ur)
+ - nPYc dataset objects (https://github.com/phenomecentre/nPYc-Toolbox)
 
 Provides:
- - Batch *&* drift correction for LC-MS datasets
- - Feature filtering by RSD and linearity of response
- - Calculation of spectral line-width in NMR
- - PCA of datasets
- - Visualisation of datasets
+ - Visualisation of all the features in your dataset
+ - Ability to explore the correlations driven from any feature of choice
+ - Suggestion of structural sets (i.e., features putatively resulting from the same compound)
+ - Ability to change the correlation method, threshold, FDR correction method
+ - Ability to change the correlation threshold and retention time window for defining structural sets
 
 Exports:
- - Basic tabular csv
- - [ISA-TAB](http://isa-tools.org)
+ - Basic tabular csv of all results (feature names, correlations, p-values, FDR corrected q-values, structural sets, etc.)
+ - Interactive html plots (plotly)
 
 ## Installation
 
-To install _via_ [pip](https://pypi.org/project/nPYc/), run:
+To install _via_ [pip](insert web-page when set up), run:
 
-    pip install nPYc 
+    pip install istocsy 
 
 To install from a local copy of the source, simply navigate to the main package folder and run:
 
@@ -34,11 +33,11 @@ To install from a local copy of the source, simply navigate to the main package 
 
 Alternatively, using pip and a local copy of the source:
 
-    pip install /nPYC-toolboxDirectory/
+    pip install /ISTOCSY-toolboxDirectory/
 
 Installation with pip allows the usage of the uninstall command
 
-    pip uninstall nPYc
+    pip uninstall istocsy
 
 
 ## Documentation

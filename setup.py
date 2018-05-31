@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 
-setup(name='nPYc',
-	version='1.0.4',
+setup(name='ISTOCSY',
+	version='1.0.0',
 	description='National Phenome Centre toolbox',
 	url='https://github.com/phenomecentre/npyc-toolbox',
-	author='National Phenome Centre',
-	author_email='phenomecentre@imperial.ac.uk',
+	author='Caroline Sands',
+	author_email='caroline.sands01@imperial.ac.uk',
 	license='MIT',
 	packages=find_packages(),
 	install_requires=[
@@ -18,7 +18,7 @@ setup(name='nPYc',
 		"plotly>=2.6.0",
 		"pyqtgraph>=0.10.0",
 		"scipy>=1.1.0",
-		"PyQt5>=5.10.1",
+		"PyQt5>=5.9.2",
 		"nPYc>=1.0.4",
 		"pyChemometrics>=0.1"
 	],
@@ -31,8 +31,8 @@ setup(name='nPYc',
 		"Topic :: Scientific/Engineering :: Bio-Informatics",
 		],
 	long_description = """\
-		Toolbox for preprocessing of metabolic profiling datasets
-		---------------------------------------------------------
+		ISTOCSY
+		-------
 
 		.. image:: https://travis-ci.org/phenomecentre/nPYc-Toolbox.svg?branch=master
 		   :target: https://travis-ci.org/phenomecentre/nPYc-Toolbox
@@ -46,27 +46,26 @@ setup(name='nPYc',
 
 		|
 
-		The nPYc toolbox offers functions for the import, preprocessing, and QC of metabolic profiling datasets.
+		ISTOCSY is a python library for interactively exploring the correlations between features in mass spectrometry datasets
 
 		Documentation can be found on `Read the Docs <http://npyc-toolbox.readthedocs.io/en/latest/?badge=latest>`_.
 
-		Imports
+		Imports:
 		 - Peak-picked LC-MS data (XCMS, Progenesis QI)
-		 - Raw NMR spectra (Bruker format)
-		 - Targeted datasets (TargetLynx, Bruker BI-LISA & BI-Quant-Ur)
+		 - nPYc dataset objects (https://github.com/phenomecentre/nPYc-Toolbox)
 
-		Provides
-		 - Batch *&* drift correction for LC-MS datasets
-		 - Feature filtering by RSD and linearity of response
-		 - Calculation of spectral line-width in NMR
-		 - PCA of datasets
-		 - Visualisation of datasets
+		Provides:
+		 - Visualisation of all the features in your dataset
+		 - Ability to explore the correlations driven from any feature of choice
+		 - Suggestion of structural sets (i.e., features putatively resulting from the same compound)
+		 - Ability to change the correlation method, threshold, FDR correction method
+		 - Ability to change the correlation threshold and retention time window for defining structural sets
 
-		Exports
-		 - Basic tabular csv
-		 - `ISA-TAB <http://isa-tools.org>`_
+		Exports:
+		 - Basic tabular csv of all results (feature names, correlations, p-values, FDR corrected q-values, structural sets, etc.)
+		 - Interactive html plots (plotly)
 
-		The nPYc toolbox is `developed <https://github.com/phenomecentre/npyc-toolbox>`_ by the informatics team at `The National Phenome Centre <http://phenomecentre.org/>`_ at `Imperial College London <http://imperial.ac.uk/>`_.
+		The nPYc toolbox is `developed <https://github.com/phenomecentre/ISTOCSY>`_ by the Caroline Sands at `The National Phenome Centre <http://phenomecentre.org/>`_ at `Imperial College London <http://imperial.ac.uk/>`_.
 		""",
 		documentation='http://npyc-toolbox.readthedocs.io/en/latest/?badge=stable',
 		include_package_data=True,
