@@ -18,9 +18,9 @@ pg.setConfigOption('foreground', 'k')
 import matplotlib
 import numbers
 from matplotlib import pyplot as plt
-from _utilities import _loadCSV, _findNearest, _shiftedColorMap, _calcCorrelation, _findStructuralSets
-from _utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
-from _plotting import plotCorrelation, plotScatter, plotHeatmap
+from ._utilities import _loadCSV, _findNearest, _shiftedColorMap, _calcCorrelation, _findStructuralSets
+from ._utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
+from ._plotting import plotCorrelation, plotScatter, plotHeatmap
 
 class ISTOCSY(QtGui.QWidget):
 	"""

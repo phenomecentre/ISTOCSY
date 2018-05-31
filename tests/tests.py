@@ -13,17 +13,17 @@ import unittest
 import sys
 import os
 import tempfile
-sys.path.append("/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/pyIstocsy")
-from _utilities import _loadCSV, _findNearest, _shiftedColorMap, _calcCorrelation, _findStructuralSets
-from _plotting import plotCorrelation, plotScatter, plotHeatmap
+sys.path.append("..")
+from pyIstocsy._utilities import _loadCSV, _findNearest, _shiftedColorMap, _calcCorrelation, _findStructuralSets
+from pyIstocsy._plotting import plotCorrelation, plotScatter, plotHeatmap
 import numpy as np
 import pandas
 from scipy.stats import pearsonr, spearmanr, kendalltau
 from statsmodels.stats.multitest import multipletests
 import matplotlib
 
-intensityDataFile = '/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/tests/test_data/intensityData.csv'
-featureMetadataFile = '/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/tests/test_data/featureData.csv'
+intensityDataFile = 'test_data/intensityData.csv'
+featureMetadataFile = 'test_data/featureData.csv'
 
 featureMetadata = pandas.read_csv(featureMetadataFile)
 intensityData = np.genfromtxt(intensityDataFile, delimiter=',')

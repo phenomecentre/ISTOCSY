@@ -12,7 +12,7 @@ from matplotlib.colors import rgb2hex
 import numpy as np
 import plotly
 import plotly.graph_objs as go
-from _utilities import _calcCorrelation
+from ._utilities import _calcCorrelation
 
 
 def plotCorrelation(tempTable, cVect, mask, savePath='plotCorrelation', autoOpen=True):
