@@ -1,6 +1,6 @@
 # ISTOCSY
 
-[![Build Status](https://travis-ci.org/phenomecentre/nPYc-Toolbox.svg?branch=master)](https://travis-ci.org/phenomecentre/nPYc-Toolbox) [![Documentation Status](https://readthedocs.org/projects/npyc-toolbox/badge/?version=latest)](http://npyc-toolbox.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/phenomecentre/nPYc-Toolbox/branch/master/graph/badge.svg)](https://codecov.io/gh/phenomecentre/nPYc-Toolbox) ![Python36](https://img.shields.io/badge/python-3.6-blue.svg) [![PyPI](https://img.shields.io/pypi/v/nPYc.svg)](https://pypi.org/project/nPYc/)
+[![Build Status](https://travis-ci.org/phenomecentre/ISTOCSY.svg?branch=master)](https://travis-ci.org/phenomecentre/ISTOCSY) [![Documentation Status](https://readthedocs.org/projects/istocsy/badge/?version=latest)](https://istocsy.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/phenomecentre/ISTOCSY/branch/master/graph/badge.svg)](https://codecov.io/gh/phenomecentre/ISTOCSY) ![Python36](https://img.shields.io/badge/python-3.6-blue.svg) [![PyPI](https://img.shields.io/pypi/v/ISTOCSY.svg)](https://pypi.org/project/ISTOCSY/)
 
 * Version 1.0.0
 
@@ -41,31 +41,13 @@ Installation with pip allows the usage of the uninstall command
 
 
 ## Documentation
-Documentation is hosted on [Read the Docs](http://npyc-toolbox.readthedocs.io/en/latest/index.html).
+Documentation is hosted on [Read the Docs](https://istocsy.readthedocs.io/en/latest/).
 
 Documentation is generated *via* [Sphinx Autodoc](http://www.sphinx-doc.org/), documentation markup is in [reStructuredText](http://docutils.sourceforge.net/rst.html).
 
 To build the documentation locally, cd into the `docs` directory and run:
 
     make html
-
-To clear the current documentation in order to rebuild after making changes, run:
-
-    make clean
-
-## Development
-
-Source management is [git-flow](http://nvie.com/posts/a-successful-git-branching-model/)-like - no development in the master branch! When making a change, create a fork based on develop, and issue a pull request when ready.
-
-When merging into the develop branch, all new code must include unit-tests, these tests should pass, and overall code-coverage for the toolbox should not drop.
-
-
-### Releases
-When merging from develop (or hotfix branches) into release, ensure:
-
-* All references to the debugger are removed
-* All paths are relative and platform agnostic
-* All tests pass
 
 
 ### Testing
@@ -79,8 +61,3 @@ To run all tests, cd into the `Tests` directory and run:
 Individual test modules can be run with:
 
     python -m `test_filename` -v
-
-
-## Standard measures and codings
-
-When stored internally, and unless explicitly overriden, variables should conform to the units laid out in the [Nomenclature](http://npyc-toolbox.readthedocs.io/en/latest/nomenclature.html) of the documentation.

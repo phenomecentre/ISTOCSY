@@ -35,21 +35,21 @@ setup(name='ISTOCSY',
 		ISTOCSY
 		-------
 
-		.. image:: https://travis-ci.org/phenomecentre/nPYc-Toolbox.svg?branch=master
-		   :target: https://travis-ci.org/phenomecentre/nPYc-Toolbox
+		.. image:: https://travis-ci.org/phenomecentre/ISTOCSY.svg?branch=master
+		   :target: https://travis-ci.org/phenomecentre/ISTOCSY
 
-		.. image:: https://readthedocs.org/projects/npyc-toolbox/badge/?version=latest
-		   :target: http://npyc-toolbox.readthedocs.io/en/latest/?badge=latest
-		   :alt: Documentation Status
+		.. image:: https://readthedocs.org/projects/istocsy/badge/?version=latest
+			:target: https://istocsy.readthedocs.io/en/latest/?badge=latest
+			:alt: Documentation Status
 
-		.. image:: https://codecov.io/gh/phenomecentre/nPYc-Toolbox/branch/master/graph/badge.svg
-		   :target: https://codecov.io/gh/phenomecentre/nPYc-Toolbox
+		.. image:: https://codecov.io/gh/phenomecentre/ISTOCSY/branch/master/graph/badge.svg
+		   :target: https://codecov.io/gh/phenomecentre/ISTOCSY
 
 		|
 
 		ISTOCSY is a python library for interactively exploring the correlations between features in mass spectrometry datasets
 
-		Documentation can be found on `Read the Docs <http://npyc-toolbox.readthedocs.io/en/latest/?badge=latest>`_.
+		Documentation can be found on `Read the Docs <https://istocsy.readthedocs.io/en/latest/>`_.
 
 		Imports:
 		 - Peak-picked LC-MS data (XCMS, Progenesis QI)
@@ -66,9 +66,9 @@ setup(name='ISTOCSY',
 		 - Basic tabular csv of all results (feature names, correlations, p-values, FDR corrected q-values, structural sets, etc.)
 		 - Interactive html plots (plotly)
 
-		The nPYc toolbox is `developed <https://github.com/phenomecentre/ISTOCSY>`_ by the Caroline Sands at `The National Phenome Centre <http://phenomecentre.org/>`_ at `Imperial College London <http://imperial.ac.uk/>`_.
+		The nPYc toolbox is `developed <https://github.com/phenomecentre/ISTOCSY>`_ by Caroline Sands at `The National Phenome Centre <http://phenomecentre.org/>`_ at `Imperial College London <http://imperial.ac.uk/>`_.
 		""",
-		documentation='http://npyc-toolbox.readthedocs.io/en/latest/?badge=stable',
+		documentation='https://istocsy.readthedocs.io/en/latest/',
 		include_package_data=True,
 		zip_safe=False
 	)
