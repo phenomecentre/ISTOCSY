@@ -18,9 +18,10 @@ setup(name='ISTOCSY',
 		"plotly>=2.6.0",
 		"pyqtgraph>=0.10.0",
 		"scipy>=1.1.0",
-		"PyQt5>=5.9.2",
+		"PyQt5>=5.10.1",
 		"nPYc>=1.0.4",
-		"pyChemometrics>=0.1"
+		"pyChemometrics>=0.1",
+		"ipython==6.2.1"
 	],
 	classifiers = [
 		"Programming Language :: Python",
