@@ -7,7 +7,7 @@
 *Thumbs.db
 *.orig
 .coverage
-/docs/_build
+/docs/build
 /.idea
 /dist/
 /build/
