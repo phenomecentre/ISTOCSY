@@ -7,6 +7,6 @@ pandas==0.23.0
 plotly==2.6.0
 pyqtgraph==0.10.0
 scipy==1.1.0
-PyQt5==5.10.1
+PyQt5==5.9.2
 nPYc==1.0.4
 pyChemometrics==0.1
