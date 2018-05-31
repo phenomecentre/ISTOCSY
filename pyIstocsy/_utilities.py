@@ -196,9 +196,6 @@ def _calcCorrelation(X, Y, correlationMethod='pearson', correctionMethod=None):
 
 		qVect = multipletests(pVect, method=correctionMethod)
 		qVect = qVect[1]
-		
-	import pdb
-	pdb.set_trace()
 
 	return cVect, pVect, qVect
 
