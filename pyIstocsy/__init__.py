@@ -3,6 +3,6 @@ The `nPYc-Toolbox <https://github.com/phenomecentre/nPYc-Toolbox>`_ defines obje
 """
 __version__ = '1.0.0'
 
-from . import runISTOCSY
+from .runISTOCSY import main as runISTOCSY
 
 __all__ = ['runISTOCSY']

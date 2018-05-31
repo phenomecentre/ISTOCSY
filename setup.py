@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(name='ISTOCSY',
 	version='1.0.0',
-	description='National Phenome Centre toolbox',
-	url='https://github.com/phenomecentre/npyc-toolbox',
+	description='ISTOCSY',
+	url='https://github.com/phenomecentre/ISTOCSY',
 	author='Caroline Sands',
 	author_email='caroline.sands01@imperial.ac.uk',
 	license='MIT',
@@ -31,12 +31,13 @@ setup(name='ISTOCSY',
 		"Operating System :: OS Independent",
 		"Topic :: Scientific/Engineering :: Bio-Informatics",
 		],
+	scripts=['bin/ISTOCSY'],
 	long_description = """\
 		ISTOCSY
 		-------
 
-		.. image:: https://travis-ci.org/phenomecentre/ISTOCSY.svg?branch=master
-		   :target: https://travis-ci.org/phenomecentre/ISTOCSY
+		.. image:: https://travis-ci.com/phenomecentre/ISTOCSY.svg?branch=master
+		   :target: https://travis-ci.com/phenomecentre/ISTOCSY
 
 		.. image:: https://readthedocs.org/projects/istocsy/badge/?version=latest
 			:target: https://istocsy.readthedocs.io/en/latest/?badge=latest
