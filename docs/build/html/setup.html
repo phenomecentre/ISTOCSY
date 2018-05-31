@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>System and data requirements &mdash; ISTOCSY v1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ISTOCSY v1 documentation" href="index.html"/>
+        <link rel="next" title="Tutorial" href="tutorial.html"/>
+        <link rel="prev" title="Introduction to ISTOCSY" href="introduction.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ISTOCSY
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to ISTOCSY</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">System and data requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-requirements">System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-requirements">Data requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-1-csv-file-format">Format 1: csv file format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-2-npyc-dataset-object-format">Format 2: nPYc dataset object format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ISTOCSY</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>System and data requirements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="system-and-data-requirements">
+<h1>System and data requirements<a class="headerlink" href="#system-and-data-requirements" title="Permalink to this headline">¶</a></h1>
+<p>This page details the data and system requirements and the setup for running ISTOCSY.</p>
+<div class="section" id="system-requirements">
+<h2>System requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<p>ISTOCSY runs in Python.</p>
+<p>The following libraries must be installed:</p>
+<p>In addition, there is some dependency on the nPYc library which can be downloaded here:</p>
+<p>&lt;CAZ ADD THIS&gt;</p>
+</div>
+<div class="section" id="data-requirements">
+<h2>Data requirements<a class="headerlink" href="#data-requirements" title="Permalink to this headline">¶</a></h2>
+<p>ISTOCSY can work with data input in one of two ways; either in csv file format; or as an nPYc dataset object.</p>
+</div>
+<div class="section" id="format-1-csv-file-format">
+<h2>Format 1: csv file format<a class="headerlink" href="#format-1-csv-file-format" title="Permalink to this headline">¶</a></h2>
+<p>If using the csv file format, two csv files are required.</p>
+<ol class="arabic simple">
+<li>intensity data file: this file should contain numerical data only, of ns*nv dimensions, where ns is the number of samples (rows in the matrix) and nv the number of variables (columns in the matrix) i.e., the intensities of nv features across ns samples.</li>
+<li>feature metadata file: as a minimum, this file should contain 3 columns and nv + 1 (header) rows. After the column headers, each row should give information on the corresponding variable in the intensity data file, and the 3 columns must consisit of ‘Feature Name’ (str) name of the feature; ‘Retention Time’ (number) feature retention time; ‘m/z’ (number) mass of the feature. Note the columns in the feature metadata must have these exact headers for the information to be extracted.</li>
+</ol>
+<p>Example excerpt from the intensity data file:</p>
+<div class="figure" style="width: 90%">
+<img alt="intensity data file example" src="_images/intensityData.png" />
+</div>
+<p>Example excerpt from the feature metadata file:</p>
+<div class="figure" style="width: 90%">
+<img alt="feature metadata file example" src="_images/featureMetadata.png" />
+</div>
+</div>
+<div class="section" id="format-2-npyc-dataset-object-format">
+<h2>Format 2: nPYc dataset object format<a class="headerlink" href="#format-2-npyc-dataset-object-format" title="Permalink to this headline">¶</a></h2>
+<p>Give brief details on:
+- nPYc
+- pyChemometrics
+- nPYc dataset object</p>
+<p>&lt;CAZ not sure whether to include this or not…?&gt;</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction to ISTOCSY" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Caroline J Sands.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

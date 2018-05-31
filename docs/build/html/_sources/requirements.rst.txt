@@ -1,0 +1,35 @@
+======================
+Requirements and Setup
+======================
+
+CAZ write something here?
+
+
+Requirements
+============
+
+CAZ give more details on these
+- nPYc
+- pyChemometrics
+- intensityData and featureMetadata files
+
+
+Setup
+=====
+
+********************
+1. Import runISTOCSY
+********************
+
+**************************************
+2. Define the paths to your data files
+**************************************
+
+**************************************************************
+3. Define the path to a directory in which to save any outputs
+**************************************************************
+
+
+********
+4. Run!!
+********

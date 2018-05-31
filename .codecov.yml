@@ -1,0 +1,13 @@
+# codecov:
+#   branch: develop
+
+coverage:
+  status:
+    project:
+      default:
+        threshold: 0.5
+
+ignore:
+  - "docs/"
+  - "Notebooks/"
+  - "pyISTOCSY/stuff i don't want to do coverage for.py"
