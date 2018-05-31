@@ -10,4 +10,5 @@ coverage:
 ignore:
   - "docs/"
   - "Notebooks/"
-  - "pyISTOCSY/stuff i don't want to do coverage for.py"
+  - "pyISTOCSY/runISTOCSY.py"
+  - "pyISTOCSY/utilitiesUI.py"

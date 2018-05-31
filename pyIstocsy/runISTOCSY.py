@@ -179,7 +179,7 @@ class ISTOCSY(QtGui.QWidget):
 	def init_ui(self):
 		""" Set up page layout """
 
-		self.setWindowTitle('ISTAMSY')
+		self.setWindowTitle('ISTOCSY')
 
 		hbox = QtGui.QVBoxLayout()
 		self.setLayout(hbox)
