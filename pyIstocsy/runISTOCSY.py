@@ -487,7 +487,7 @@ class ISTOCSY(QtGui.QWidget):
 	def on_showSettings_clicked(self):
 		""" Display settings """
 
-		QMessageBox.about(self, "ISTAMSY settings",
+		QMessageBox.about(self, "ISTOCSY settings",
 				  'Correlation method: %s\nCorrelation kind: %s\nCorrelation threshold: %s\nMultiple testing correction: %s\nCorrelation threshold (sets): %s\nRetention time tolerance (sets): %s' % (self.Attributes['correlationMethod'], self.Attributes['correlationKind'], str(self.Attributes['correlationThreshold']), self.Attributes['correctionMethod'], str(self.Attributes['structuralThreshold']), str(self.Attributes['rtThreshold'])) )
 
 
