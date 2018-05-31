@@ -10,12 +10,7 @@ System requirements
 
 ISTOCSY runs in Python.
 
-The following libraries must be installed:
-
-In addition, there is some dependency on the nPYc library which can be downloaded here:
-
-<CAZ ADD THIS>
-
+To see the list of required libraries see setup.py
 
 Data requirements
 =================
@@ -48,10 +43,5 @@ Example excerpt from the feature metadata file:
 Format 2: nPYc dataset object format
 ====================================
 
-Give brief details on:
-- nPYc
-- pyChemometrics
-- nPYc dataset object
-
-<CAZ not sure whether to include this or not...?>
+If using the nPYc dataset object format only the object itself is required (for details see https://github.com/phenomecentre/nPYc-Toolbox)
 
