@@ -1,6 +1,6 @@
 # ISTOCSY
 
-[![Build Status](https://travis-ci.org/phenomecentre/ISTOCSY.svg?branch=master)](https://travis-ci.org/phenomecentre/ISTOCSY) [![Documentation Status](https://readthedocs.org/projects/istocsy/badge/?version=latest)](https://istocsy.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/phenomecentre/ISTOCSY/branch/master/graph/badge.svg)](https://codecov.io/gh/phenomecentre/ISTOCSY) ![Python36](https://img.shields.io/badge/python-3.6-blue.svg) [![PyPI](https://img.shields.io/pypi/v/ISTOCSY.svg)](https://pypi.org/project/ISTOCSY/)
+[![Build Status](https://travis-ci.com/phenomecentre/ISTOCSY.svg?branch=master)](https://travis-ci.com/phenomecentre/ISTOCSY) [![Documentation Status](https://readthedocs.org/projects/istocsy/badge/?version=latest)](https://istocsy.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/phenomecentre/ISTOCSY/branch/master/graph/badge.svg)](https://codecov.io/gh/phenomecentre/ISTOCSY) ![Python36](https://img.shields.io/badge/python-3.6-blue.svg) [![PyPI](https://img.shields.io/pypi/v/ISTOCSY.svg)](https://pypi.org/project/ISTOCSY/)
 
 * Version 1.0.0
 
