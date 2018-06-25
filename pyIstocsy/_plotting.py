@@ -106,6 +106,7 @@ def plotScatter(tempTable, xName, yName, setcVectAlphas, title='', savePath='plo
 	uniq, indices = np.unique(classes, return_inverse=True)
 
 	for i in range(len(uniq)):
+
 		c = setcVectAlphas[indices == i, :]
 		c = rgb2hex(c[0,:3])
 
@@ -162,7 +163,7 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 
 	nv = tempTable.shape[0]
 
-	# Need to calculate the correlation between all peaks then cluster
+	# Calculate the correlation between all features
 	cMatrix = np.ndarray([nv, nv])
 
 	for i in np.arange(nv):
@@ -175,7 +176,9 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 		z=cMatrix,
 		x=tempTable['Feature Name'],
 		y=tempTable['Feature Name'],
-		colorscale='RdBu',
+		colorscale='RdBu'
+#		zmin=0,
+#		zmax=1
 		)
 
 	data.append(DATAplot)
@@ -194,4 +197,3 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 
 	figure = go.Figure(data=data, layout=layout)
 	plotly.offline.plot(figure, filename = savePath +'.html', auto_open=autoOpen)
-
