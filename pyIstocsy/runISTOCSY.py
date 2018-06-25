@@ -18,7 +18,7 @@ pg.setConfigOption('foreground', 'k')
 import matplotlib
 import numbers
 from matplotlib import pyplot as plt
-from ._utilities import _loadCSV, _findNearest, _shiftedColorMap, _calcCorrelation, _findStructuralSets
+from ._utilities import _loadCSV, _findNearest, _calcCorrelation, _findStructuralSets
 from ._utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
 from ._plotting import plotCorrelation, plotScatter, plotHeatmap
 
@@ -45,9 +45,7 @@ class ISTOCSY(QtGui.QWidget):
 	"""
 
 	# TODO: documentation
-	# TODO: Enhancement: output in tempTable - three samples with highest intensity of feature - need to add sampleMetadata to do this
 	# TODO: add back in option to run from nPYc dataset object
-
 
 	def __init__(self, **kwargs):
 
@@ -60,7 +58,7 @@ class ISTOCSY(QtGui.QWidget):
 					'correctionMethod': None,
 					'correlationThreshold': 0.8,
 					'structuralThreshold': 0.9,
-					'rtThreshold': None,
+					'rtThreshold': 0.02,
 					'showAllFeatures': True,
 					'intensityDataFile': None,
 					'featureMetadataFile': None,
@@ -129,6 +127,11 @@ class ISTOCSY(QtGui.QWidget):
 		showSettings = QtGui.QAction('Current settings', self)
 		showSettings.triggered.connect(self.on_showSettings_clicked)
 		settingsMenu.addAction(showSettings)
+
+		# Settings>Set driver
+		setDriver = QtGui.QAction('Set driver', self)
+		setDriver.triggered.connect(self.on_setDriver_clicked)
+		settingsMenu.addAction(setDriver)
 
 		# Settings>Change correlation type
 		setCorrMethod = QtGui.QAction('Set correlation method', self)
@@ -298,15 +301,10 @@ class ISTOCSY(QtGui.QWidget):
 			self.cVect, self.pVect, self.qVect = _calcCorrelation(self.dataset.intensityData, self.dataset.intensityData[:,points], correlationMethod=self.Attributes['correlationMethod'], correctionMethod=self.Attributes['correctionMethod'])
 
 			# Generate the colormap for the correlation plot
-			orig_cmap = plt.cm.RdYlBu_r
-			maxcol = np.max(self.cVect)
-			mincol = np.min(self.cVect)
-			new_cmap = _shiftedColorMap(orig_cmap, midpoint=1 - maxcol/(maxcol + np.abs(mincol)), name='new')
+			norm = matplotlib.colors.Normalize(vmin=np.min(self.cVect), vmax=np.max(self.cVect))
+			cb = matplotlib.cm.ScalarMappable(norm=norm, cmap=plt.cm.RdYlBu_r)
 
 			# Return the colours for each feature
-			norm = matplotlib.colors.Normalize(vmin=mincol, vmax=maxcol)
-			cb = matplotlib.cm.ScalarMappable(norm=norm, cmap=new_cmap)
-
 			cVectAlphas = np.zeros((self.dataset.intensityData.shape[1], 4))
 
 			cIX = 0
@@ -355,7 +353,7 @@ class ISTOCSY(QtGui.QWidget):
 		self.scatterpoints.clear()
 		self.scatterpoints.setData(spots)
 		self.scatterpoints.setPen(None)
-		
+
 		tempTable = _findStructuralSets(tempTable, self.dataset.intensityData, self.Attributes)
 
 		tempcVectAlphas = np.zeros((tempData.shape[1], 4))
@@ -363,7 +361,7 @@ class ISTOCSY(QtGui.QWidget):
 		tempcVect = tempTable['Set'].values
 		cIX = 0
 
-		norm = matplotlib.colors.Normalize(vmin=1, vmax=max(tempTable['Set']))
+		norm = matplotlib.colors.Normalize(vmin=1, vmax=max(tempTable['Set'])+1)
 		cb2 = matplotlib.cm.ScalarMappable(norm=norm, cmap=plt.cm.nipy_spectral)
 		for c in tempcVect:
 			tempcVectAlphas[cIX,:] = cb2.to_rgba(c, bytes=True)
@@ -383,7 +381,7 @@ class ISTOCSY(QtGui.QWidget):
 			if len(p1) != 0:
 				temp2 = p1[0].pos()
 				ix = _findNearest(tempTable, temp2[0], temp2[1])
-				self.displaytext.setText('Set: ' + str(tempTable.loc[ix, 'Set']))
+				self.displaytext.setText('Set: ' + str(int(tempTable.loc[ix, 'Set'])))
 				self.displaytext.setPos(temp2[0], temp2[1])
 				self.displaytext.show()
 			else:
@@ -396,7 +394,7 @@ class ISTOCSY(QtGui.QWidget):
 		self.setcVectAlphas = setcVectAlphas
 
 		# Save to self for output if required
-		self.exportButton.setText('Driver: ' + self.tempTable.loc[self.tempTable.index[0],'Feature Name'] + '\nThreshold: ' + str(self.Attributes['correlationThreshold']) + ' (' + self.Attributes['correlationKind'] + ')\nNumber of correlating features: ' + str(nCorr-1) + '\nNumber of structural sets: ' + str(max(tempTable['Set'])) + '\n**EXPORT**')
+		self.exportButton.setText('Driver: ' + self.dataset.featureMetadata.loc[self.dataset.featureMetadata.index[self.latestpoint],'Feature Name'] + '\nThreshold: ' + str(self.Attributes['correlationThreshold']) + ' (' + self.Attributes['correlationKind'] + ')\nNumber of correlating features: ' + str(nCorr-1) + '\nNumber of structural sets: ' + str(int(max(tempTable['Set']))) + '\n**EXPORT**')
 
 
 	def on_resetButton_clicked(self):
@@ -489,6 +487,25 @@ class ISTOCSY(QtGui.QWidget):
 
 		QMessageBox.about(self, "ISTOCSY settings",
 				  'Correlation method: %s\nCorrelation kind: %s\nCorrelation threshold: %s\nMultiple testing correction: %s\nCorrelation threshold (sets): %s\nRetention time tolerance (sets): %s' % (self.Attributes['correlationMethod'], self.Attributes['correlationKind'], str(self.Attributes['correlationThreshold']), self.Attributes['correctionMethod'], str(self.Attributes['structuralThreshold']), str(self.Attributes['rtThreshold'])) )
+
+
+	def on_setDriver_clicked(self):
+		""" User input to set driver feature """
+
+		x, ok = QInputDialog.getText(self, '', 'Enter ''Feature Name'' of driver:')
+
+		# Check that driver is in dataset
+		featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
+
+		try:
+			temp = featureix.values
+			self.latestpoint = temp[0]
+
+			# Check if changed and action result of change
+			_actionIfChange(self, None, x, True, "Driver succesfully set to: ")
+
+		except:
+			_displayMessage("Driver must match an entry in the ''Feature Name'' column of the feature metadata file")
 
 
 	def on_setCorrMethod_clicked(self):

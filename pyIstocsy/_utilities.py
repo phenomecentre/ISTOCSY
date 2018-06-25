@@ -13,14 +13,14 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from scipy.stats import pearsonr, spearmanr, kendalltau
 from statsmodels.stats.multitest import multipletests
-
+import networkx as nx
 
 def _loadCSV(self, intensityDataFile, featureMetadataFile):
 	""" Load data from csv """
-	
+
 	if ((intensityDataFile is None) or (featureMetadataFile is None)):
 		raise TypeError('intensityDataFile and featureMetadataFile must be set')
-	
+
 	# Create dataset
 	class Dataset(object):
 
@@ -38,13 +38,13 @@ def _loadCSV(self, intensityDataFile, featureMetadataFile):
 	fv = self.dataset.featureMetadata.shape[0]
 	if dv != fv:
 		raise ValueError('intensityData and featureMetadata have different dimensions')
-		
-		
+
+
 #def _loadData(self):
 #	""" Load data from csv or nPYc dataset object """
-#	
+#
 ## 	TODO: add this functionality
-#	
+#
 #	# Create dataset
 #	class Dataset(object):
 #
@@ -53,16 +53,16 @@ def _loadCSV(self, intensityDataFile, featureMetadataFile):
 #			self.featureMetadata = pandas.DataFrame(None, columns=['Feature Name', 'Retention Time', 'm/z'])
 #
 #	self.dataset = Dataset()
-#	
+#
 #	# nPYc dataset object
 #	if (self.Attributes['nPYcDataset'] is not None):
-#			
+#
 #		self.dataset = self.Attributes['nPYcDataset']
 #		del self.Attributes['nPYcDataset']
-#	
+#
 #	# Load from csv files
 #	else:
-#		
+#
 #		self.dataset.intensityData = np.genfromtxt(self.Attributes['intensityDataFile'], delimiter=',')
 #		self.dataset.featureMetadata = pandas.read_csv(self.Attributes['featureMetadataFile'])
 #
@@ -100,61 +100,6 @@ def _findNearest(featureMetadata, Xvalue, Yvalue):
 	test = featureMetadata.index[temp].values
 
 	return test[0]
-
-
-def _shiftedColorMap(cmap, start=0.0, midpoint=0.5, stop=1.0, name='shiftedcmap'):
-	'''
-	From Paul H at Stack Overflow
-	http://stackoverflow.com/questions/7404116/defining-the-midpoint-of-a-colormap-in-matplotlib
-	Function to offset the "center" of a colormap. Useful for
-	data with a negative min and positive max and you want the
-	middle of the colormap's dynamic range to be at zero
-
-	Input
-	-----
-	  cmap : The matplotlib colormap to be altered
-	  start : Offset from lowest point in the colormap's range.
-		  Defaults to 0.0 (no lower ofset). Should be between
-		  0.0 and `midpoint`.
-	  midpoint : The new center of the colormap. Defaults to
-		  0.5 (no shift). Should be between 0.0 and 1.0. In
-		  general, this should be  1 - vmax/(vmax + abs(vmin))
-		  For example if your data range from -15.0 to +5.0 and
-		  you want the center of the colormap at 0.0, `midpoint`
-		  should be set to  1 - 5/(5 + 15)) or 0.75
-	  stop : Offset from highets point in the colormap's range.
-		  Defaults to 1.0 (no upper ofset). Should be between
-		  `midpoint` and 1.0.
-	'''
-
-	cdict = {
-		'red': [],
-		'green': [],
-		'blue': [],
-		'alpha': []
-	}
-
-	# regular index to compute the colors
-	reg_index = np.linspace(start, stop, 257)
-
-	# shifted index to match the data
-	shift_index = np.hstack([
-		np.linspace(0.0, midpoint, 128, endpoint=False),
-		np.linspace(midpoint, 1.0, 129, endpoint=True)
-	])
-
-	for ri, si in zip(reg_index, shift_index):
-		r, g, b, a = cmap(ri)
-
-		cdict['red'].append((si, r, r))
-		cdict['green'].append((si, g, g))
-		cdict['blue'].append((si, b, b))
-		cdict['alpha'].append((si, a, a))
-
-	newcmap = LinearSegmentedColormap(name, cdict)
-	plt.register_cmap(cmap=newcmap)
-
-	return newcmap
 
 
 def _calcCorrelation(X, Y, correlationMethod='pearson', correctionMethod=None):
@@ -202,42 +147,55 @@ def _calcCorrelation(X, Y, correlationMethod='pearson', correctionMethod=None):
 
 def _findStructuralSets(featureTable, X, attributes):
 	"""
-	Finds sets of features in featureTable which are resulting from the same compound (in theory!) 
-	
+	Finds sets of features in featureTable which are resulting from the same compound (in theory!)
+
 	Features in the same structural set are defined as those which:
 		- correlate with >= attributes['structuralThreshold']
 		- are within a defined retention time window (attributes['rtThreshold'])
-	
+
+	Clusters are defined using networkx
+
 	:param pandas.dataFrame featureTable feature metadata, must contain 'Retention Time', and 'Correlation' columns
 	:param numpy.ndarray X: intensity data for all features in featureTable
-	:param dictionary attributes: settings, must contain 'structuralThreshold', 'rtThreshold', 'correlationMethod' and 'correctionMethod'	
+	:param dictionary attributes: settings, must contain 'structuralThreshold', 'rtThreshold', 'correlationMethod' and 'correctionMethod'
 	"""
-	
-	# TODO: correlation within tempTable - sets can depend on which feature is selected as a driver...
-	
-	# If rtThreshold is None, set to max*2 so all features included
-	if attributes['rtThreshold'] is None:
-		rtThreshold = np.max(featureTable['Retention Time'])*2
-	else:
-		rtThreshold = attributes['rtThreshold']
-		
+
+	# Calculate the correlation and the difference in RT between all features in table
 	nv = featureTable.shape[0]
-	
-	# Define set 1
-	findSet = (featureTable['Correlation'] >= attributes['structuralThreshold']) & (featureTable['Retention Time'] < featureTable.loc[featureTable.index[0],'Retention Time']+rtThreshold) & (featureTable['Retention Time'] > featureTable.loc[featureTable.index[0],'Retention Time']-rtThreshold)
-	featureTable['Set'] = 1
-	nv = nv - sum(findSet)
-	delTable = featureTable.copy()
-	setix = 2
+	C = np.zeros([nv, nv])
+	R = np.zeros([nv, nv])
+	for i in np.arange(0, nv):
 
-	while nv != 0:
-		delTable = delTable[findSet==False].copy()
-		delcVect = _calcCorrelation(X[:,delTable.index], X[:,delTable.index[0]], correlationMethod=attributes['correlationMethod'], correctionMethod=attributes['correctionMethod'])
-		findSet = (delcVect[0] >= attributes['structuralThreshold']) & (delTable['Retention Time'] < delTable.loc[delTable.index[0],'Retention Time']+rtThreshold) & (delTable['Retention Time'] > delTable.loc[delTable.index[0],'Retention Time']-rtThreshold)
-		for i in np.arange(sum(findSet==True)):
-			featureTable.loc[delTable.index[findSet][i], 'Set'] = setix
+		# Correlation
+		delcVect = _calcCorrelation(X[:,featureTable.index], X[:,featureTable.index[i]], correlationMethod=attributes['correlationMethod'], correctionMethod=attributes['correctionMethod'])
+		C[i,:] = delcVect[0]
 
+		# Difference in RT
+		R[i,:] = np.abs(featureTable['Retention Time'].values - featureTable.loc[featureTable.index[i], 'Retention Time'])
+
+	# Boolean matrices for correlation and RT passing thresholds
+	Cpass = C >= attributes['structuralThreshold']
+	Rpass = R <= attributes['rtThreshold']
+
+	# Feature connections passing both threshold
+	O = Cpass & Rpass
+
+	# Cluster
+	G = nx.from_numpy_matrix(O)
+	temp = list(nx.connected_components(G))
+
+	# Extract unique sets from clustering network
+	setix = 1
+	for i in np.arange(len(temp)):
+		for j in np.arange(nv):
+			if j in temp[i]:
+				featureTable.loc[featureTable.index[j], 'Set'] = setix
 		setix = setix+1
-		nv = nv - sum(findSet)
-	
-	return featureTable	
+
+	# Set as int
+	featureTable['Set'] = featureTable['Set'].astype(int)
+
+	# Sort by clusters
+	featureTable.sort_values('Set', axis=0, ascending=True, inplace=True)
+
+	return featureTable
