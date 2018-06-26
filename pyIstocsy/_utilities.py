@@ -13,28 +13,31 @@ from scipy.stats import pearsonr, spearmanr, kendalltau
 from statsmodels.stats.multitest import multipletests
 import networkx as nx
 
-def _loadCSV(self, intensityDataFile, featureMetadataFile):
-	""" Load data from csv """
+def _loadData(self, intensityDataFile=None, featureMetadataFile=None):
+	""" Load data either from nPYc dataset object or from intensityData and featureMetadata csv files """
+	
+	# Create dataset
+	class Dataset(object):
 
-	if ((intensityDataFile is None) or (featureMetadataFile is None)):
-		raise TypeError('intensityDataFile and featureMetadataFile must be set')
+		def __init__(self):
+			self.intensityData = np.array(None)
+			self.featureMetadata = pandas.DataFrame(None, columns=['Feature Name', 'Retention Time', 'm/z'])
 
-	self.dataset.intensityData = np.genfromtxt(intensityDataFile, delimiter=',')
-	self.dataset.featureMetadata = pandas.read_csv(featureMetadataFile)
+	self.dataset = Dataset()
 
-	# Check attributes
-	ds, dv = self.dataset.intensityData.shape
-	fv = self.dataset.featureMetadata.shape[0]
-	if dv != fv:
-		raise ValueError('intensityData and featureMetadata have different dimensions')
-
-
-def _loadDatasetObject(self):
-	""" Load data from nPYc dataset object: note, 'nPYcDataset must be input argument on initiation of runISTOCSY """
-
-	# nPYc dataset object
-	self.dataset = self.Attributes['nPYcDataset']
-	del self.Attributes['nPYcDataset']
+	# Check input
+	if ((intensityDataFile is None) or (featureMetadataFile is None)) and (self.Attributes['nPYcDataset'] is None):
+		raise TypeError('Either intensityDataFile and featureMetadataFile files OR nPYcDataset must be set')
+	
+	# Load data from nPYc dataset object: note, 'nPYcDataset must be input argument on initiation of runISTOCSY
+	elif self.Attributes['nPYcDataset'] is not None:
+		self.dataset = self.Attributes['nPYcDataset']
+		self.Attributes['nPYcDataset'] = None
+		
+	# Load data from csv files
+	else:
+		self.dataset.intensityData = np.genfromtxt(intensityDataFile, delimiter=',')
+		self.dataset.featureMetadata = pandas.read_csv(featureMetadataFile)
 
 	# Check attributes
 	ds, dv = self.dataset.intensityData.shape

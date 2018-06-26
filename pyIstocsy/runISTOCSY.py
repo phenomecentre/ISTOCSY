@@ -17,9 +17,8 @@ pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
 import matplotlib
 import numbers
-import pandas
 from matplotlib import pyplot as plt
-from ._utilities import _loadCSV, _loadDatasetObject, _findNearest, _calcCorrelation, _findStructuralSets
+from ._utilities import _loadData, _findNearest, _calcCorrelation, _findStructuralSets
 from ._utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
 from ._plotting import plotCorrelation, plotScatter, plotHeatmap
 
@@ -86,20 +85,11 @@ class ISTOCSY(QtGui.QWidget):
 		self.plotwidget2.setLabel('left', 'm/z')
 		self.plotwidget2.setLabel('bottom', 'Retention Time', units='minutes')
 		
-		# Create dataset
-		class Dataset(object):
 
-			def __init__(self):
-				self.intensityData = np.array(None)
-				self.featureMetadata = pandas.DataFrame(None, columns=['Feature Name', 'Retention Time', 'm/z'])
-
-		self.dataset = Dataset()
-		
-		
 		# Load data if nPYcDataset input
 		if self.Attributes['nPYcDataset'] is not None:
 			
-			_loadDatasetObject(self)
+			_loadData(self)
 
 			self.resetPlot()
 
@@ -485,7 +475,7 @@ class ISTOCSY(QtGui.QWidget):
 	def on_importData_clicked(self):
 		""" Import data """
 
-		_loadCSV(self, self.Attributes['intensityDataFile'], self.Attributes['featureMetadataFile'])
+		_loadData(self, intensityDataFile=self.Attributes['intensityDataFile'], featureMetadataFile=self.Attributes['featureMetadataFile'])
 
 		self.resetPlot()
 
