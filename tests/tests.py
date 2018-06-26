@@ -14,13 +14,13 @@ import sys
 import os
 import tempfile
 sys.path.append("..")
-from pyIstocsy._utilities import _loadCSV, _findNearest, _calcCorrelation, _findStructuralSets
+from pyIstocsy._utilities import _loadData, _findNearest, _calcCorrelation, _findStructuralSets
 from pyIstocsy._plotting import plotCorrelation, plotScatter, plotHeatmap
 import numpy as np
 import pandas
 from scipy.stats import pearsonr, spearmanr, kendalltau
 from statsmodels.stats.multitest import multipletests
-import matplotlib
+
 
 intensityDataFile = 'test_data/intensityData.csv'
 featureMetadataFile = 'test_data/featureData.csv'
@@ -31,14 +31,40 @@ intensityData = np.genfromtxt(intensityDataFile, delimiter=',')
 class test_utilities(unittest.TestCase):
 	""" test code in _utilities.py """
 
-	def test_loadCSV(self):
+	def test_loadData(self):
+		
+		# Test raises error when insufficient information
+		self.assertRaises(TypeError, _loadData)
 
-		_loadCSV(self, intensityDataFile, featureMetadataFile)
+		# Test loading from nPYc object
+		class Dataset(object):
+
+			def __init__(self):
+				self.intensityData = np.array(None)
+				self.featureMetadata = pandas.DataFrame(None, columns=['Feature Name', 'Retention Time', 'm/z'])
+
+		dataset = Dataset()
+		dataset.intensityData = intensityData
+		dataset.featureMetadata = featureMetadata	
+		self.Attributes = {'nPYcDataset': dataset}
+		
+		_loadData(self)
+		
+		np.testing.assert_equal(self.dataset.intensityData, intensityData)
+		pandas.util.testing.assert_frame_equal(self.dataset.featureMetadata, featureMetadata, check_dtype=False)
+		
+		# Test loading from csv files
+		_loadData(self, intensityDataFile=intensityDataFile, featureMetadataFile=featureMetadataFile)
 
 		np.testing.assert_equal(self.dataset.intensityData, intensityData)
-
 		pandas.util.testing.assert_frame_equal(self.dataset.featureMetadata, featureMetadata, check_dtype=False)
 
+		# Test raises error if dimensions do not match
+		featureMetadataTemp = featureMetadata.copy(deep=True)
+		featureMetadataTemp.drop(featureMetadata.index[0])
+		
+		self.assertRaises(ValueError, _loadData, self, intensityDataFile=intensityDataFile, featureMetadataFile=featureMetadataTemp)
+		
 
 	def test_findNearest(self):
 
