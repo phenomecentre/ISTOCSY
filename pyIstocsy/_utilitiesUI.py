@@ -51,11 +51,16 @@ def _writeOutput(self):
 	""" Save correlated feature list to csv with screenshot of app """
 
 	if hasattr(self, 'tempTable'):
-		saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
-		self.tempTable.to_csv(os.path.join(self.Attributes['saveDir'], saveName + '.csv'), encoding='utf-8')
+		saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
+		
+		# Sort table so driver (correlation==1) at top and export csv
+		tempTable = self.tempTable.sort_values('Correlation', axis=0, ascending=False, inplace=False)
+		tempTable.to_csv(os.path.join(self.Attributes['saveDir'], saveName + '.csv'), encoding='utf-8')
+		
 	else:
 		saveName = 'ISTOCSY GUI'
-
+		
+	# Save screen shot of app
 	printer = QPrinter(QPrinter.HighResolution)
 	printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], saveName + '_screenshot.pdf'))
 	printer.setOutputFormat(QPrinter.PdfFormat)

@@ -341,9 +341,6 @@ class ISTOCSY(QtGui.QWidget):
 		if self.qVect is not None:
 			tempTable['Q-value'] = self.qVect[mask]
 
-		# Sort table so driver (correlation==1) at top
-		tempTable.sort_values('Correlation', axis=0, ascending=False, inplace=True)
-
 		# Extract corresponding intensityData
 		tempData = self.dataset.intensityData[:,tempTable.index]
 
@@ -623,7 +620,7 @@ class ISTOCSY(QtGui.QWidget):
 			else:
 				mask=None
 
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotCorrelation(self.dataset.featureMetadata, self.cVect, mask, savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotCorrelation'))
 
 		else:
@@ -634,7 +631,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) structural sets plot """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotScatter(self.tempTable, 'Retention Time', 'm/z', self.setcVectAlphas, title='m/z vs. RT coloured by Set', savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotStructuralSets'))
 
 		else:
@@ -645,7 +642,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) correlation vs. RT sets plot """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotScatter(self.tempTable, 'Retention Time', 'Correlation', self.setcVectAlphas, title='Correlation vs. RT coloured by Set', savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotCorrelationVsRT'))
 
 		else:
@@ -656,7 +653,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) heatmap of internal correlations between all features above correationThreshold to driver """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotHeatmap(self.tempTable, self.dataset.intensityData, correlationMethod=self.Attributes['correlationMethod'], savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotSetsHeatmap'))
 
 		else:
