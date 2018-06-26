@@ -17,8 +17,9 @@ pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
 import matplotlib
 import numbers
+import pandas
 from matplotlib import pyplot as plt
-from ._utilities import _loadCSV, _findNearest, _calcCorrelation, _findStructuralSets
+from ._utilities import _loadCSV, _loadDatasetObject, _findNearest, _calcCorrelation, _findStructuralSets
 from ._utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
 from ._plotting import plotCorrelation, plotScatter, plotHeatmap
 
@@ -43,9 +44,7 @@ class ISTOCSY(QtGui.QWidget):
 		:param nPYc dataset nPYcDataset: nPYc Dataset containing at least intensityData and featureMetadata (with dimensions as described above)
 		:param str saveDir: path to directory where to save any output (default=current working directory)
 	"""
-
-	# TODO: documentation
-	# TODO: add back in option to run from nPYc dataset object
+	
 
 	def __init__(self, **kwargs):
 
@@ -86,6 +85,23 @@ class ISTOCSY(QtGui.QWidget):
 		self.plotwidget2.addItem(self.structuralpoints)
 		self.plotwidget2.setLabel('left', 'm/z')
 		self.plotwidget2.setLabel('bottom', 'Retention Time', units='minutes')
+		
+		# Create dataset
+		class Dataset(object):
+
+			def __init__(self):
+				self.intensityData = np.array(None)
+				self.featureMetadata = pandas.DataFrame(None, columns=['Feature Name', 'Retention Time', 'm/z'])
+
+		self.dataset = Dataset()
+		
+		
+		# Load data if nPYcDataset input
+		if self.Attributes['nPYcDataset'] is not None:
+			
+			_loadDatasetObject(self)
+
+			self.resetPlot()
 
 
 	def menus(self):
