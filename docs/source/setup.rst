@@ -38,10 +38,19 @@ Example excerpt from the feature metadata file:
 .. figure:: _static/featureMetadata.png
 	:figwidth: 90%
 	:alt: feature metadata file example
+	
+NOTE, here you can see that the entries in the 'Feature Name' column can consist of either a unique identifier (where feature identity is unknown), or of the assignment/annotation if this is known.
 
 
 Format 2: nPYc dataset object format
 ====================================
 
 If using the nPYc dataset object format only the object itself is required (for details see https://github.com/phenomecentre/nPYc-Toolbox)
+
+In this case, the nPYc dataset object must be added as a argument when pyIstocsy is run:
+
+.. code-block:: python
+
+	import pyIstocsy
+	pyIstocsy.runISTOCSY(nPYcDataset=nPYcDatasetObject)
 
