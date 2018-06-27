@@ -10,7 +10,7 @@ Introduction to the main panels
 
 The ISTOCSY window consists of three main panels and a drop down menu.
 
-.. figure:: _static/overview.png
+.. figure:: _static/correlation0p8.png
 	:figwidth: 90%
 	:alt: ISTOCSY overview
 

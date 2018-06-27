@@ -43,7 +43,7 @@ class ISTOCSY(QtGui.QWidget):
 		:param nPYc dataset nPYcDataset: nPYc Dataset containing at least intensityData and featureMetadata (with dimensions as described above)
 		:param str saveDir: path to directory where to save any output (default=current working directory)
 	"""
-	
+
 
 	def __init__(self, **kwargs):
 
@@ -84,11 +84,11 @@ class ISTOCSY(QtGui.QWidget):
 		self.plotwidget2.addItem(self.structuralpoints)
 		self.plotwidget2.setLabel('left', 'm/z')
 		self.plotwidget2.setLabel('bottom', 'Retention Time', units='minutes')
-		
+
 
 		# Load data if nPYcDataset input
 		if self.Attributes['nPYcDataset'] is not None:
-			
+
 			_loadData(self)
 
 			self.resetPlot()
@@ -165,22 +165,22 @@ class ISTOCSY(QtGui.QWidget):
 		settingsMenu.addAction(setSetCorrThreshold)
 
 		# Display>Correlation to selected peak
-		displayCorPlot = QtGui.QAction('Display interactive correlation to selected peak plot', self)
+		displayCorPlot = QtGui.QAction('Display interactive ion map coloured by correlation to driver', self)
 		displayCorPlot.triggered.connect(self.on_displayCorPlot_clicked)
 		displayMenu.addAction(displayCorPlot)
 
 		# Display>Structural sets plot
-		displaySetsPlot = QtGui.QAction('Display interactive structural sets plot', self)
+		displaySetsPlot = QtGui.QAction('Display interactive ion map coloured by structural set', self)
 		displaySetsPlot.triggered.connect(self.on_displaySetsPlot_clicked)
 		displayMenu.addAction(displaySetsPlot)
 
 		# Display>Correlation vs. retention time plot
-		displayCorRtPlot = QtGui.QAction('Display interactive correlation vs retention time coloured by set plot', self)
+		displayCorRtPlot = QtGui.QAction('Display interactive correlation vs retention time coloured by structural set plot', self)
 		displayCorRtPlot.triggered.connect(self.on_displayCorRtPlot_clicked)
 		displayMenu.addAction(displayCorRtPlot)
 
 		# Display>Correlation map for sets
-		displayCorMap = QtGui.QAction('Display interactive correlation map for sets', self)
+		displayCorMap = QtGui.QAction('Display interactive heatmap of internal correlations for all features', self)
 		displayCorMap.triggered.connect(self.on_displayCorMap_clicked)
 		displayMenu.addAction(displayCorMap)
 
@@ -307,7 +307,8 @@ class ISTOCSY(QtGui.QWidget):
 			self.cVect, self.pVect, self.qVect = _calcCorrelation(self.dataset.intensityData, self.dataset.intensityData[:,points], correlationMethod=self.Attributes['correlationMethod'], correctionMethod=self.Attributes['correctionMethod'])
 
 			# Generate the colormap for the correlation plot
-			norm = matplotlib.colors.Normalize(vmin=np.min(self.cVect), vmax=np.max(self.cVect))
+			#norm = matplotlib.colors.Normalize(vmin=np.min(self.cVect), vmax=np.max(self.cVect))
+			norm = matplotlib.colors.Normalize(vmin=-1, vmax=1)
 			cb = matplotlib.cm.ScalarMappable(norm=norm, cmap=plt.cm.RdYlBu_r)
 
 			# Return the colours for each feature
@@ -319,7 +320,8 @@ class ISTOCSY(QtGui.QWidget):
 				cIX = cIX+1
 
 			# Set the alpha (min 50, max 255)
-			cVectAlphas[:,3] = (((abs(self.cVect) - np.min(abs(self.cVect))) * (255 - 50)) / (np.max(abs(self.cVect)) - np.min(abs(self.cVect)))) + 50
+#			cVectAlphas[:,3] = (((abs(self.cVect) - np.min(abs(self.cVect))) * (255 - 50)) / (np.max(abs(self.cVect)) - np.min(abs(self.cVect)))) + 50
+			cVectAlphas[:,3] = (((abs(self.cVect) - 0) * (255 - 50)) / (1 - 0)) + 50
 			if any(cVectAlphas[:,3] > 255):
 				cVectAlphas[cVectAlphas[:,3]>255,3] = 255
 			self.cVectAlphas = cVectAlphas
@@ -340,9 +342,6 @@ class ISTOCSY(QtGui.QWidget):
 		tempTable['P-value'] = self.pVect[mask]
 		if self.qVect is not None:
 			tempTable['Q-value'] = self.qVect[mask]
-
-		# Sort table so driver (correlation==1) at top
-		tempTable.sort_values('Correlation', axis=0, ascending=False, inplace=True)
 
 		# Extract corresponding intensityData
 		tempData = self.dataset.intensityData[:,tempTable.index]
@@ -623,7 +622,7 @@ class ISTOCSY(QtGui.QWidget):
 			else:
 				mask=None
 
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotCorrelation(self.dataset.featureMetadata, self.cVect, mask, savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotCorrelation'))
 
 		else:
@@ -634,7 +633,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) structural sets plot """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotScatter(self.tempTable, 'Retention Time', 'm/z', self.setcVectAlphas, title='m/z vs. RT coloured by Set', savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotStructuralSets'))
 
 		else:
@@ -645,7 +644,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) correlation vs. RT sets plot """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotScatter(self.tempTable, 'Retention Time', 'Correlation', self.setcVectAlphas, title='Correlation vs. RT coloured by Set', savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotCorrelationVsRT'))
 
 		else:
@@ -656,7 +655,7 @@ class ISTOCSY(QtGui.QWidget):
 		""" Create interactive (plotly) heatmap of internal correlations between all features above correationThreshold to driver """
 
 		if hasattr(self, 'tempTable'):
-			saveName = self.tempTable.loc[self.tempTable.index[0],'Feature Name'].replace('/','')
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotHeatmap(self.tempTable, self.dataset.intensityData, correlationMethod=self.Attributes['correlationMethod'], savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotSetsHeatmap'))
 
 		else:
