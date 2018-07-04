@@ -175,15 +175,30 @@ def _findStructuralSets(featureTable, intensityData, driverIX, attributes):
 	featureTable.loc[featureTable.index[featureTable['Set'] == 1], 'Set'] = driverSet
 	featureTable.loc[featureTable.index[switchD==True], 'Set'] = 1
 
+	# NOTE: all the matrix sorting etc is temporary and therefore not particularly elegant!
+	# This will be deleted and matrices not returned once finished optimising results
+
+	# Add index for sorting matrices
+	featureTable['sortedIX'] = np.arange(nv)
+
 	# Sort by clusters (Set) then by RT
 	featureTable.sort_values(['Set','Retention Time'], inplace=True)
+
+	# Sort C, R, O by sortedIX
+	sortedIX = featureTable['sortedIX'].values
+	featureTable.drop(columns = ['sortedIX'])
+
+	C = C[sortedIX, :]
+	C = C[:, sortedIX]
+	R = R[sortedIX, :]
+	R = R[:, sortedIX]
+	O = O[sortedIX, :]
+	O = O[:, sortedIX]
 
 	# Return matrices
 	matrices = {
 			'C': C,
-			'Cpass': Cpass,
 			'R': R,
-			'Rpass': Rpass,
 			'O': O
 			}
 

@@ -58,10 +58,10 @@ class ISTOCSY(QtGui.QWidget):
 					'structuralThreshold': 0.9,
 					'rtThreshold': 0.02,
 					'showAllFeatures': True,
-					'intensityDataFile': '/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/intensityData.csv', #None,
-					'featureMetadataFile': '/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/featureData.csv', #None,
+					'intensityDataFile': None, #'/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/intensityData.csv',# None
+					'featureMetadataFile': None, #'/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/featureData.csv', # None
 					'nPYcDataset': None,
-					'saveDir': '/Users/cs401/Documents/ISTOCSY/DELETE', #'.'
+					'saveDir': '.' #'/Users/cs401/Documents/ISTOCSY/DELETE' # '.'
 					}
 
 		# Allow attributes to be overwritten by kwargs
@@ -402,6 +402,7 @@ class ISTOCSY(QtGui.QWidget):
 		self.tempTable = tempTable
 		self.tempcVectAlphas = tempcVectAlphas
 		self.setcVectAlphas = setcVectAlphas
+		self.matrices = matrices
 
 		# Save to self for output if required
 		self.exportButton.setText('Driver: ' + self.dataset.featureMetadata.loc[self.dataset.featureMetadata.index[self.latestpoint],'Feature Name'] + '\nThreshold: ' + str(self.Attributes['correlationThreshold']) + ' (' + self.Attributes['correlationKind'] + ')\nNumber of correlating features: ' + str(nCorr-1) + '\nNumber of structural sets: ' + str(int(max(tempTable['Set']))) + '\n**EXPORT**')
