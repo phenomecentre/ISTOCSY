@@ -205,6 +205,12 @@ A heatmap of the internal correlations between all detected features:
 .. figure:: _static/plotlyHeatmap.png
 	:figwidth: 90%
 	:alt: ISTOCSY plotly heatmap all correlations
+	
+A scatter plot of the relative intensities between the driver and all detected features:
+
+.. figure:: _static/plotlyCorrelationScatter.png
+	:figwidth: 90%
+	:alt: ISTOCSY plotly scatter plot of intensities between driver and all features
 
 
 
