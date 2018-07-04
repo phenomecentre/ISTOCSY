@@ -129,7 +129,8 @@ def _findStructuralSets(featureTable, intensityData, driverIX, attributes):
 	Clusters are defined using networkx
 
 	:param pandas.dataFrame featureTable feature metadata, must contain 'Retention Time', and 'Correlation' columns
-	:param numpy.ndarray X: intensity data for all features in featureTable
+	:param numpy.ndarray intensityData: intensity data for all features in featureTable
+	:param int driverIX: index of driver feature
 	:param dictionary attributes: settings, must contain 'structuralThreshold', 'rtThreshold', 'correlationMethod' and 'correctionMethod'
 	"""
 
