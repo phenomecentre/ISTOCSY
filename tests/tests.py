@@ -15,7 +15,7 @@ import os
 import tempfile
 sys.path.append("..")
 from pyIstocsy._utilities import _loadData, _findNearest, _calcCorrelation, _findStructuralSets
-from pyIstocsy._plotting import plotCorrelation, plotScatter, plotHeatmap
+from pyIstocsy._plotting import plotCorrelation, plotScatter, plotHeatmap, plotCorrelationScatter
 import numpy as np
 import pandas
 from scipy.stats import pearsonr, spearmanr, kendalltau
@@ -131,7 +131,7 @@ class test_utilities(unittest.TestCase):
 		corrTemp = _calcCorrelation(intensityData, intensityData[:,0], correlationMethod='pearson', correctionMethod='bonferroni')
 		featureMetadataTemp['Correlation'] = corrTemp[0]
 
-		tempTable = _findStructuralSets(featureMetadataTemp, intensityData, attributes)
+		tempTable, matrices = _findStructuralSets(featureMetadataTemp, intensityData, 0, attributes)
 
 		np.testing.assert_array_equal(tempTable['Set'].values, np.array([1, 2, 3, 4, 5, 6, 7, 8, 8, 9]))
 
@@ -173,6 +173,18 @@ class test_plotting(unittest.TestCase):
 			expectedPath = os.path.join(tmpdirname, 'heatmapPlot.html')
 			self.assertTrue(os.path.exists(expectedPath))
 
+	def test_plotCorrelationScatter(self):
+
+		with tempfile.TemporaryDirectory() as tmpdirname:
+
+			featureMetadataTemp = featureMetadata.copy(deep=True)
+			featureMetadataTemp['Set'] = 1
+
+			setcVectAlphas = np.zeros([featureMetadataTemp.shape[0], 4])
+			plotCorrelationScatter(featureMetadataTemp, 0, intensityData, setcVectAlphas, savePath=os.path.join(tmpdirname, 'correlationScatterPlot'), autoOpen=False)
+
+			expectedPath = os.path.join(tmpdirname, 'correlationScatterPlot.html')
+			self.assertTrue(os.path.exists(expectedPath))
 
 
 if __name__ == '__main__':
