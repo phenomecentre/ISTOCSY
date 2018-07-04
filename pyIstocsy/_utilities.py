@@ -118,7 +118,7 @@ def _calcCorrelation(X, Y, correlationMethod='pearson', correctionMethod=None):
 	return cVect, pVect, qVect
 
 
-def _findStructuralSets(featureTable, X, attributes):
+def _findStructuralSets(featureTable, intensityData, driverIX, attributes):
 	"""
 	Finds sets of features in featureTable which are resulting from the same compound (in theory!)
 
@@ -140,7 +140,7 @@ def _findStructuralSets(featureTable, X, attributes):
 	for i in np.arange(0, nv):
 
 		# Correlation
-		delcVect = _calcCorrelation(X[:,featureTable.index], X[:,featureTable.index[i]], correlationMethod=attributes['correlationMethod'], correctionMethod=attributes['correctionMethod'])
+		delcVect = _calcCorrelation(intensityData[:,featureTable.index], intensityData[:,featureTable.index[i]], correlationMethod=attributes['correlationMethod'], correctionMethod=attributes['correctionMethod'])
 		C[i,:] = delcVect[0]
 
 		# Difference in RT
@@ -168,7 +168,22 @@ def _findStructuralSets(featureTable, X, attributes):
 	# Set as int
 	featureTable['Set'] = featureTable['Set'].astype(int)
 
-	# Sort by clusters
-	featureTable.sort_values('Set', axis=0, ascending=True, inplace=True)
+	# Driver should be in Set 1
+	driverSet = featureTable.loc[driverIX, 'Set']
+	switchD = featureTable['Set'] == driverSet
+	featureTable.loc[featureTable.index[featureTable['Set'] == 1], 'Set'] = driverSet
+	featureTable.loc[featureTable.index[switchD==True], 'Set'] = 1
 
-	return featureTable
+	# Sort by clusters (Set) then by RT
+	featureTable.sort_values(['Set','Retention Time'], inplace=True)
+
+	# Return matrices
+	matrices = {
+			'C': C,
+			'Cpass': Cpass,
+			'R': R,
+			'Rpass': Rpass,
+			'O': O
+			}
+
+	return featureTable, matrices
