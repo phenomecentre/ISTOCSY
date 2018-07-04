@@ -20,7 +20,7 @@ import numbers
 from matplotlib import pyplot as plt
 from ._utilities import _loadData, _findNearest, _calcCorrelation, _findStructuralSets
 from ._utilitiesUI import _displayMessage, _actionIfChange, _writeOutput
-from ._plotting import plotCorrelation, plotScatter, plotHeatmap
+from ._plotting import plotCorrelation, plotScatter, plotHeatmap, plotCorrelationScatter
 
 class ISTOCSY(QtGui.QWidget):
 	"""
@@ -58,10 +58,10 @@ class ISTOCSY(QtGui.QWidget):
 					'structuralThreshold': 0.9,
 					'rtThreshold': 0.02,
 					'showAllFeatures': True,
-					'intensityDataFile': None,
-					'featureMetadataFile': None,
+					'intensityDataFile': None, #'/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/intensityData.csv',# None
+					'featureMetadataFile': None, #'/Users/cs401/Box Sync/Carolines code/phenomecentre/istocsy/development/dataFolder/featureData.csv', # None
 					'nPYcDataset': None,
-					'saveDir': '.'
+					'saveDir': '.' #'/Users/cs401/Documents/ISTOCSY/DELETE' # '.'
 					}
 
 		# Allow attributes to be overwritten by kwargs
@@ -183,6 +183,11 @@ class ISTOCSY(QtGui.QWidget):
 		displayCorMap = QtGui.QAction('Display interactive heatmap of internal correlations for all features', self)
 		displayCorMap.triggered.connect(self.on_displayCorMap_clicked)
 		displayMenu.addAction(displayCorMap)
+
+		# Display>Scatter plot for all features against driver
+		displayCorScatter = QtGui.QAction('Display interactive scatter plot between intensities of driver and all features', self)
+		displayCorScatter.triggered.connect(self.on_displayCorScatter_clicked)
+		displayMenu.addAction(displayCorScatter)
 
 
 	def init_ui(self):
@@ -359,7 +364,7 @@ class ISTOCSY(QtGui.QWidget):
 		self.scatterpoints.setData(spots)
 		self.scatterpoints.setPen(None)
 
-		tempTable = _findStructuralSets(tempTable, self.dataset.intensityData, self.Attributes)
+		tempTable, matrices = _findStructuralSets(tempTable, self.dataset.intensityData, self.latestpoint, self.Attributes)
 
 		tempcVectAlphas = np.zeros((tempData.shape[1], 4))
 		setcVectAlphas = np.zeros((tempData.shape[1], 4))
@@ -397,6 +402,7 @@ class ISTOCSY(QtGui.QWidget):
 		self.tempTable = tempTable
 		self.tempcVectAlphas = tempcVectAlphas
 		self.setcVectAlphas = setcVectAlphas
+		self.matrices = matrices
 
 		# Save to self for output if required
 		self.exportButton.setText('Driver: ' + self.dataset.featureMetadata.loc[self.dataset.featureMetadata.index[self.latestpoint],'Feature Name'] + '\nThreshold: ' + str(self.Attributes['correlationThreshold']) + ' (' + self.Attributes['correlationKind'] + ')\nNumber of correlating features: ' + str(nCorr-1) + '\nNumber of structural sets: ' + str(int(max(tempTable['Set']))) + '\n**EXPORT**')
@@ -657,6 +663,16 @@ class ISTOCSY(QtGui.QWidget):
 		if hasattr(self, 'tempTable'):
 			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
 			plotHeatmap(self.tempTable, self.dataset.intensityData, correlationMethod=self.Attributes['correlationMethod'], savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotSetsHeatmap'))
+
+		else:
+			_displayMessage("Driver feature must be selected before plots can be displayed!")
+
+	def on_displayCorScatter_clicked(self):
+		"""  """
+
+		if hasattr(self, 'tempTable'):
+			saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
+			plotCorrelationScatter(self.tempTable, self.latestpoint, self.dataset.intensityData, self.setcVectAlphas, savePath=os.path.join(self.Attributes['saveDir'], saveName + '_plotCorrelationScatter'))
 
 		else:
 			_displayMessage("Driver feature must be selected before plots can be displayed!")

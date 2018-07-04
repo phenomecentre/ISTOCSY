@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import QSizeF
 from PyQt5.QtPrintSupport import QPrinter
 import os
+import numpy as np
 
 def _displayMessage(messageText):
 	"""
@@ -45,21 +46,27 @@ def _actionIfChange(self, original, new, recalcCorrelation, text):
 			self.resetPlot()
 
 		_displayMessage(text + str(new))
-		
-		
+
+
 def _writeOutput(self):
 	""" Save correlated feature list to csv with screenshot of app """
 
 	if hasattr(self, 'tempTable'):
 		saveName = self.tempTable.loc[self.latestpoint,'Feature Name'].replace('/','')
-		
+
 		# Sort table so driver (correlation==1) at top and export csv
-		tempTable = self.tempTable.sort_values('Correlation', axis=0, ascending=False, inplace=False)
-		tempTable.to_csv(os.path.join(self.Attributes['saveDir'], saveName + '.csv'), encoding='utf-8')
-		
+#		tempTable = self.tempTable.sort_values('Correlation', axis=0, ascending=False, inplace=False)
+		self.tempTable.to_csv(os.path.join(self.Attributes['saveDir'], saveName + '.csv'), encoding='utf-8')
+
+		# Save internal correlation, RT difference and overlap (both passing threshold) matrices
+		# NOTE, this is temporary
+#		np.savetxt(os.path.join(self.Attributes['saveDir'], saveName + '_internalCorrelation.csv'), self.matrices['C'], delimiter=",")
+#		np.savetxt(os.path.join(self.Attributes['saveDir'], saveName + '_internalRTdifferences.csv'), self.matrices['R'], delimiter=",")
+#		np.savetxt(os.path.join(self.Attributes['saveDir'], saveName + '_internalOverlap.csv'), self.matrices['O'], delimiter=",")
+
 	else:
 		saveName = 'ISTOCSY GUI'
-		
+
 	# Save screen shot of app
 	printer = QPrinter(QPrinter.HighResolution)
 	printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], saveName + '_screenshot.pdf'))
