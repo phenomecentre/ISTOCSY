@@ -41,7 +41,7 @@ def plotCorrelation(tempTable, cVect, mask, savePath='plotCorrelation', autoOpen
 	C_str = ["%.4f" % i for i in cVect] # Format text for tooltips
 	maxcol = np.max(abs(cVect))
 
-	hovertext = ["Feature: %s; R: %s" % i for i in zip(feature, C_str)] # Text for tooltips
+	hovertext = ["%s; Cor: %s" % i for i in zip(feature, C_str)] # Text for tooltips
 
 	# Convert cVect to a value between 0.1 and 1 - to set the alpha of each point relative to loading weight
 	alphas = (((abs(cVect) - np.min(abs(cVect))) * (1 - 0.2)) / (maxcol - np.min(abs(cVect)))) + 0.2
@@ -163,6 +163,10 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 
 	nv = tempTable.shape[0]
 
+	# Generate text for legend
+	legendtext = ["%s (Set %.f)" % i for i in zip(tempTable['Feature Name'], tempTable['Set'])]
+
+
 	# Calculate the correlation between all features
 	cMatrix = np.ndarray([nv, nv])
 
@@ -186,14 +190,79 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 	layout = go.Layout(
 		title='Heatmap',
 		xaxis = dict(
-			title = 'Feature Name'
+			tickvals = [k for k in range(0,nv+1)],
+			ticktext = legendtext
 			),
 		yaxis = dict(
-			title = 'Structural Set',
-			tickvals=[k for k in range(0,nv+1)],
-			ticktext=tempTable['Set'].astype(str),
-			)
+			tickvals = [k for k in range(0,nv+1)],
+			ticktext = legendtext
+			),
+		margin = dict(b = 160, r = 160)
 		)
+
+	figure = go.Figure(data=data, layout=layout)
+	plotly.offline.plot(figure, filename = savePath +'.html', auto_open=autoOpen)
+
+
+def plotCorrelationScatter(tempTable, driverIX, intensityData, setcVectAlphas, savePath='plotCorrelationScatter', autoOpen=True):
+	"""
+	Generate plotly interactive html plot of feature intensity between driver feature and all detected features coloured by structural set
+
+	:param pandas.dataFrame tempTable: data to plot, must contain 'Feature Name', 'Retention Time' and 'm/z' columns
+	:param int driverIX: index of driver feature
+	:param numpy.ndarray intensityData: MS intensity data, rows for samples, columns for variables
+	:param numpy.ndarray setcVectAlphas: color of each point (colour of point in set)
+	:param str savePath: path/name to save plot to/as
+	:param bool autoOpen: flag as to whether to automatically open html figure
+	"""
+
+	# Set up
+	data = []
+	nv = tempTable.shape[0]
+
+	# Generate text for legend
+	legendtext = ["%s; Set: %.f; Cor: %.2f" % i for i in zip(tempTable['Feature Name'], tempTable['Set'], tempTable['Correlation'])]
+
+	# Generate data for each feature
+	for i in np.arange(nv):
+
+		c = rgb2hex(setcVectAlphas[i,:3])
+
+		xVals = intensityData[:,tempTable.index[i]]
+		xVals = xVals/np.max(xVals)
+
+		yVals = intensityData[:,driverIX]
+		yVals = yVals/np.max(yVals)
+
+		FEATUREplot = go.Scatter(
+			x = xVals,
+			y = yVals,
+			mode = 'markers',
+			marker = dict(
+				colorscale = 'Portland',
+				color = c,
+				symbol = 'circle',
+				),
+			name = legendtext[i],
+			showlegend = True,
+			)
+
+		data.append(FEATUREplot)
+
+	layout = {
+		'xaxis' : dict(
+			title = 'Selected feature (relative intensity)',
+			range = [0, 1.3]
+			),
+		'yaxis' : dict(
+			title = 'Driver feature (relative intensity)',
+			),
+		'title' : 'Scatter plot between driver and each correlated feature',
+		'legend' : dict(
+			yanchor = 'middle',
+			xanchor = 'right'
+			),
+	}
 
 	figure = go.Figure(data=data, layout=layout)
 	plotly.offline.plot(figure, filename = savePath +'.html', auto_open=autoOpen)
