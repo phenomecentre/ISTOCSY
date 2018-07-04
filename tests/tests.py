@@ -179,6 +179,7 @@ class test_plotting(unittest.TestCase):
 
 			featureMetadataTemp = featureMetadata.copy(deep=True)
 			featureMetadataTemp['Set'] = 1
+			featureMetadataTemp['Correlation'] = 1
 
 			setcVectAlphas = np.zeros([featureMetadataTemp.shape[0], 4])
 			plotCorrelationScatter(featureMetadataTemp, 0, intensityData, setcVectAlphas, savePath=os.path.join(tmpdirname, 'correlationScatterPlot'), autoOpen=False)
