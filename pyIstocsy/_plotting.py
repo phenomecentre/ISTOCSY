@@ -102,7 +102,7 @@ def plotScatter(tempTable, xName, yName, setcVectAlphas, title='', savePath='plo
 
 	data = []
 
-	# Plot categorical values by sets
+	# Plot by set
 	uniq, indices = np.unique(classes, return_inverse=True)
 
 	for i in range(len(uniq)):
@@ -158,9 +158,7 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 	:param bool autoOpen: flag as to whether to automatically open html figure
 	"""
 
-	# Sort by Set
-	tempTable.sort_values('Set', axis=0, ascending=False, inplace=True)
-
+	# Set up
 	nv = tempTable.shape[0]
 
 	# Generate text for legend
@@ -187,18 +185,21 @@ def plotHeatmap(tempTable, intensityData, correlationMethod='pearson', savePath=
 
 	data.append(DATAplot)
 
-	layout = go.Layout(
-		title='Heatmap',
-		xaxis = dict(
+	layout = {
+		'title' : 'Heatmap',
+		'xaxis' : dict(
 			tickvals = [k for k in range(0,nv+1)],
 			ticktext = legendtext
 			),
-		yaxis = dict(
+		'yaxis' : dict(
 			tickvals = [k for k in range(0,nv+1)],
 			ticktext = legendtext
 			),
-		margin = dict(b = 160, r = 160)
-		)
+		'margin' : dict(
+			b = 120,
+			l = 200,
+			r = 140)
+	}
 
 	figure = go.Figure(data=data, layout=layout)
 	plotly.offline.plot(figure, filename = savePath +'.html', auto_open=autoOpen)
@@ -261,7 +262,7 @@ def plotCorrelationScatter(tempTable, driverIX, intensityData, setcVectAlphas, s
 		'legend' : dict(
 			yanchor = 'middle',
 			xanchor = 'right'
-			),
+			)
 	}
 
 	figure = go.Figure(data=data, layout=layout)
