@@ -25,7 +25,7 @@ Download or clone ISTOCSY repo, then from inside Python run:
     import sys
 	sys.path.append('path to saved ISTOCSY code')
 	import runISTOCSY
-	runISTOCSY,main()
+	runISTOCSY.main()
 
 ## Documentation
 
