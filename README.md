@@ -15,7 +15,7 @@ Provides:
  - Ability to change the correlation threshold and retention time window for defining structural sets
 
 Exports:
- - Basic tabular csv of all results (feature names, correlations, p-values, FDR corrected q-values, structural sets, etc.)
+ - Basic tabular csv of all results (feature names, correlations, structural sets, etc.)
  - Interactive html plots (plotly)
 
 ## Installation
