@@ -15,7 +15,7 @@ Provides:
  - Ability to change the correlation threshold and retention time window for defining structural sets
 
 Exports:
- - Basic tabular csv of all results (feature names, correlations, p-values, FDR corrected q-values, structural sets, etc.)
+ - Basic tabular csv of all results (feature names, correlations, structural sets, etc.)
  - Interactive html plots (plotly)
 
 ## Installation
@@ -25,7 +25,7 @@ Download or clone ISTOCSY repo, then from inside Python run:
     import sys
 	sys.path.append('path to saved ISTOCSY code')
 	import runISTOCSY
-	runISTOCSY,main()
+	runISTOCSY.main()
 
 ## Documentation
 
