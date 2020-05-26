@@ -29,6 +29,7 @@ Download or clone ISTOCSY repo, then from inside Python run:
 
 ## Documentation
 
+See 'Example input data' files for examples of required format.
 Documentation in progress - watch this space!
 
 ## Testing
