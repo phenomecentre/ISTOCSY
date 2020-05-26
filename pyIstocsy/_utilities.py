@@ -197,7 +197,7 @@ def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
 	self.dataset.sampleMetadata.reset_index(drop=True, inplace=True)
 	sampleMetadata = sampleMetadata.loc[sampleDataIndexIX2,:]
 	sampleMetadata.reset_index(drop=True, inplace=True)
-	self.dataset.sampleMetadata['Sample File Name'] = self.dataset.sampleMetadata['Sample File Name'] + ';' + sampleMetadata.loc[sampleDataIndexIX2,'Sample File Name']
+	self.dataset.sampleMetadata['Sample File Name'] = self.dataset.sampleMetadata['Sample File Name'] + ';' + sampleMetadata['Sample File Name']
 
 	# Append new featureMetadata
 	self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, sort=False)
