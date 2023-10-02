@@ -932,7 +932,8 @@ def main(**kwargs):
 	app.aboutToQuit.connect(app.deleteLater)
 	myapp = ISTOCSY(**kwargs)
 	myapp.show()
-	sys.exit(app.exec())
+
+	app.exec()
 
 
 if __name__ == '__main__':
