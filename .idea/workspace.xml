@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,7 +23,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac823a7e-23d3-45e6-a967-50484608e202" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/_annotationsDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/_annotationsDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/_batchDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/_batchDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/_datasetsDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/_datasetsDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/_settingsDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/_settingsDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyIstocsy/runISTOCSY.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyIstocsy/runISTOCSY.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,9 +46,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "pyqt6",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "reference.idesettings.debugger.python"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="runISTOCSY" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ISTOCSY" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pyIstocsy" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pyIstocsy/runISTOCSY.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.runISTOCSY" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -98,16 +141,7 @@
     <MESSAGE value="Add example input data" />
     <option name="LAST_COMMIT_MESSAGE" value="Add example input data" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="320" y="166" key="Vcs.Push.Dialog.v2" timestamp="1588780856524">
-      <screen x="0" y="23" width="1440" height="808" />
-    </state>
-    <state x="320" y="166" key="Vcs.Push.Dialog.v2/0.23.1440.808/1440.23.1366.745@0.23.1440.808" timestamp="1588780856524" />
-    <state x="320" y="166" key="Vcs.Push.Dialog.v2/0.23.1440.811/1440.23.1366.745@0.23.1440.811" timestamp="1588775489078" />
-    <state x="320" y="167" key="Vcs.Push.Dialog.v2/0.23.1440.816/1440.23.1366.745@0.23.1440.816" timestamp="1588776965470" />
-    <state x="489" y="221" key="git4idea.merge.GitMergeDialog" timestamp="1588781089274">
-      <screen x="0" y="23" width="1440" height="808" />
-    </state>
-    <state x="489" y="221" key="git4idea.merge.GitMergeDialog/0.23.1440.808/1440.23.1366.745@0.23.1440.808" timestamp="1588781089274" />
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ISTOCSY$runISTOCSY.coverage" NAME="runISTOCSY Coverage Results" MODIFIED="1696254995926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pyIstocsy" />
   </component>
 </project>

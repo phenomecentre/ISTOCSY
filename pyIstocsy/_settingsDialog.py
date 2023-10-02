@@ -6,16 +6,18 @@ Created on Fri Jan 10 17:52:22 2020
 @author: cs401
 """
 
-import sip
+from PyQt6 import sip
 import os
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QLabel, QInputDialog, QDialog, QFileDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QInputDialog, QWidget, QApplication, QPushButton, QGridLayout
+
+from PyQt6.QtWidgets import QLabel, QInputDialog, QDialog, QFileDialog
 import pyqtgraph as pg
 from _utilities import _displayMessage
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
-from PyQt5.QtCore import QSizeF
-from PyQt5.QtPrintSupport import QPrinter
+from PyQt6.QtCore import QSizeF
+from PyQt6.QtPrintSupport import QPrinter
 
 class _settingsDialog(QDialog):
 
@@ -60,13 +62,13 @@ class _settingsDialog(QDialog):
 			self.setWindowTitle('View/Change Settings')
 			self.setGeometry(10, 10, 500, 300)
 
-		self.hbox = QtGui.QGridLayout()
+		self.hbox = QGridLayout()
 		self.setLayout(self.hbox)
 
 		# Correlation method 'correlationMethod'
 		self.correlationMethodText = QLabel('Correlation method: ' + self.Attributes['correlationMethod'])
-		self.correlationMethodButton = QtGui.QPushButton("Change correlation method")
-		self.correlationMethodButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.correlationMethodButton = QPushButton("Change correlation method")
+		self.correlationMethodButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.correlationMethodButton.clicked.connect(self.on_setCorrMethod_clicked)
 
 		self.hbox.addWidget(self.correlationMethodText, 1, 0)
@@ -74,8 +76,8 @@ class _settingsDialog(QDialog):
 
 		# Correlation kind 'correlationKind'
 		self.correlationKindText = QLabel('Correlation kind: ' + self.Attributes['correlationKind'])
-		self.correlationKindButton = QtGui.QPushButton("Change correlation kind")
-		self.correlationKindButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.correlationKindButton = QPushButton("Change correlation kind")
+		self.correlationKindButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.correlationKindButton.clicked.connect(self.on_setCorrRel_clicked)
 
 		self.hbox.addWidget(self.correlationKindText, 2, 0)
@@ -83,8 +85,8 @@ class _settingsDialog(QDialog):
 
 		# Correlation threshold 'correlationThreshold'
 		self.correlationThresholdText = QLabel('Correlation threshold: ' + str(self.Attributes['correlationThreshold']))
-		self.correlationThresholdButton = QtGui.QPushButton("Change correlation threshold")
-		self.correlationThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.correlationThresholdButton = QPushButton("Change correlation threshold")
+		self.correlationThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.correlationThresholdButton.clicked.connect(self.on_setCorrelationThreshold_clicked)
 
 		self.hbox.addWidget(self.correlationThresholdText, 3, 0)
@@ -92,8 +94,8 @@ class _settingsDialog(QDialog):
 
 		# Structural threshold 'structuralThreshold'
 		self.structuralThresholdText = QLabel('Correlation threshold (structural sets): ' + str(self.Attributes['structuralThreshold']))
-		self.structuralThresholdButton = QtGui.QPushButton("Change structural threshold (structural sets)")
-		self.structuralThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.structuralThresholdButton = QPushButton("Change structural threshold (structural sets)")
+		self.structuralThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.structuralThresholdButton.clicked.connect(self.on_setStructuralThreshold_clicked)
 
 		self.hbox.addWidget(self.structuralThresholdText, 4, 0)
@@ -101,8 +103,8 @@ class _settingsDialog(QDialog):
 
 		# RT threshold 'rtThreshold'
 		self.rtThresholdText = QLabel('LC-MS RT threshold (structural sets and annotation match): ' + str(self.Attributes['rtThreshold']))
-		self.rtThresholdButton = QtGui.QPushButton("Change LC-MS RT threshold (structural sets and annotation match)")
-		self.rtThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.rtThresholdButton = QPushButton("Change LC-MS RT threshold (structural sets and annotation match)")
+		self.rtThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.rtThresholdButton.clicked.connect(self.on_setRtThreshold_clicked)
 
 		self.hbox.addWidget(self.rtThresholdText, 5, 0)
@@ -110,8 +112,8 @@ class _settingsDialog(QDialog):
 
 		# mz threshold 'mzThreshold'
 		self.mzThresholdText = QLabel('LC-MS m/z ppm threshold (annotation match): ' + str(self.Attributes['mzThreshold']))
-		self.mzThresholdButton = QtGui.QPushButton("Change LC-MS m/z ppm threshold (annotation match)")
-		self.mzThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.mzThresholdButton = QPushButton("Change LC-MS m/z ppm threshold (annotation match)")
+		self.mzThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.mzThresholdButton.clicked.connect(self.on_setMzThreshold_clicked)
 
 		self.hbox.addWidget(self.mzThresholdText, 6, 0)
@@ -119,8 +121,8 @@ class _settingsDialog(QDialog):
 
 		# ppm threshold 'ppmThreshold'
 		self.ppmThresholdText = QLabel('NMR ppm threshold (annotation match): ' + str(self.Attributes['ppmThreshold']))
-		self.ppmThresholdButton = QtGui.QPushButton("Change NMR ppm threshold (annotation match)")
-		self.ppmThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.ppmThresholdButton = QPushButton("Change NMR ppm threshold (annotation match)")
+		self.ppmThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.ppmThresholdButton.clicked.connect(self.on_setPpmThreshold_clicked)
 
 		self.hbox.addWidget(self.ppmThresholdText, 7, 0)
@@ -128,8 +130,8 @@ class _settingsDialog(QDialog):
 
 		# 'applySampleIntensityFilter'
 		self.sampleIntensitySetText = QLabel('Calculate correlation on all samples or (relative) intensity filtered sample set: ' + self.Attributes['sampleIntensitySet'])
-		self.sampleIntensitySetButton = QtGui.QPushButton("Change sample set for correlation calculation")
-		self.sampleIntensitySetButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.sampleIntensitySetButton = QPushButton("Change sample set for correlation calculation")
+		self.sampleIntensitySetButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.sampleIntensitySetButton.clicked.connect(self.on_sampleIntensitySetButton_clicked)
 
 		self.hbox.addWidget(self.sampleIntensitySetText, 8, 0)
@@ -137,8 +139,8 @@ class _settingsDialog(QDialog):
 
 		# 'sampleIntensityThreshold'
 		self.sampleIntensityThresholdText = QLabel('Driver (relative) intensity threshold for defining sample set for correlation calculation: ' + str(self.Attributes['sampleIntensityThreshold']))
-		self.sampleIntensityThresholdButton = QtGui.QPushButton("Change driver (relative) intensity threshold")
-		self.sampleIntensityThresholdButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.sampleIntensityThresholdButton = QPushButton("Change driver (relative) intensity threshold")
+		self.sampleIntensityThresholdButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.sampleIntensityThresholdButton.clicked.connect(self.on_setDriverThreshold_clicked)
 
 		self.hbox.addWidget(self.sampleIntensityThresholdText, 9, 0)
@@ -146,8 +148,8 @@ class _settingsDialog(QDialog):
 			
 		# 'relativeIntensityMetric' for plotting NMR and targeted datasets
 		self.relativeIntensityMetricText = QLabel('Metric for plotting NMR and targeted data feature intensities: ' + self.Attributes['relativeIntensityMetric'])
-		self.relativeIntensityMetricButton = QtGui.QPushButton("Change metric for plotting NMR and targeted data feature intensities")
-		self.relativeIntensityMetricButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.relativeIntensityMetricButton = QPushButton("Change metric for plotting NMR and targeted data feature intensities")
+		self.relativeIntensityMetricButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.relativeIntensityMetricButton.clicked.connect(self.on_relativeIntensityMetricButton_clicked)
 
 		self.hbox.addWidget(self.relativeIntensityMetricText, 10, 0)
@@ -155,8 +157,8 @@ class _settingsDialog(QDialog):
 			
 		# 'RANSACdegree'
 		self.setRANSACdegreeText = QLabel('RANSAC degree: ' + str(self.Attributes['RANSACdegree']))
-		self.setRANSACdegreeButton = QtGui.QPushButton("Change RANSAC degree")
-		self.setRANSACdegreeButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.setRANSACdegreeButton = QPushButton("Change RANSAC degree")
+		self.setRANSACdegreeButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.setRANSACdegreeButton.clicked.connect(self.on_setRANSACdegree_clicked)
 
 		self.hbox.addWidget(self.setRANSACdegreeText, 11, 0)
@@ -164,21 +166,21 @@ class _settingsDialog(QDialog):
 
 		# 'saveDir'
 		self.saveDirText = QLabel('Directory to save exports: ' + str(self.Attributes['saveDir']))
-		self.saveDirButton = QtGui.QPushButton("Change directory to save exports")
-		self.saveDirButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.saveDirButton = QPushButton("Change directory to save exports")
+		self.saveDirButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.saveDirButton.clicked.connect(self.on_setsaveDir_clicked)
 
 		self.hbox.addWidget(self.saveDirText, 12, 0)
 		self.hbox.addWidget(self.saveDirButton, 12, 1)
 		
 		# Update settings and close
-		self.closeButton = QtGui.QPushButton("Update settings and close")
+		self.closeButton = QPushButton("Update settings and close")
 		self.closeButton.clicked.connect(self.on_closeButton_clicked)
 		self.hbox.addWidget(self.closeButton, 13, 1, 1, 2)
 
 		# Button to export settings and close
-		self.exportButton = QtGui.QPushButton("Export settings and close")
-		self.exportButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.exportButton = QPushButton("Export settings and close")
+		self.exportButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.exportButton.clicked.connect(self.on_exportButton_clicked)
 		self.hbox.addWidget(self.exportButton, 14, 1, 1, 2)
 
@@ -186,7 +188,7 @@ class _settingsDialog(QDialog):
 	def getResults(self):
 		""" Return results """
 		
-		if self.exec_() == QDialog.Accepted:
+		if self.exec() == QDialog.DialogCode.Accepted:
 
 			return self.Attributes
 

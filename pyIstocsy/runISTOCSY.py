@@ -5,11 +5,11 @@ Created on Thu Feb  8 15:02:12 2018
 
 @author: cs401
 """
-import sip
+from PyQt6 import sip
 import sys
 import os
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QLabel, QInputDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QLabel, QInputDialog, QWidget, QApplication, QPushButton, QGridLayout
 import numpy as np
 import pyqtgraph as pg
 pg.setConfigOption('background', 'w')
@@ -26,7 +26,7 @@ from _plotting import plotScatter, plotHeatmap, plotCorrelationScatter
 
 # when RANSAC fails (UrineMap2 NMR) sort this
 
-class ISTOCSY(QtGui.QWidget):
+class ISTOCSY(QWidget):
 	"""
 	App to explore correlations in MS datasets
 
@@ -103,7 +103,7 @@ class ISTOCSY(QtGui.QWidget):
 			self.setGeometry(10, 10, 1000, 600)
 
 
-		self.hbox = QtGui.QGridLayout()
+		self.hbox = QGridLayout()
 		self.setLayout(self.hbox)
 
 		# Add buttons to load/view/export data/settings etc
@@ -111,19 +111,19 @@ class ISTOCSY(QtGui.QWidget):
 		self.hbox.addWidget(self.setupText, 0, 0)
 
 
-		self.dataButton = QtGui.QPushButton("Datasets")
+		self.dataButton = QPushButton("Datasets")
 		self.dataButton.clicked.connect(self.on_dataButton_clicked)
 		self.hbox.addWidget(self.dataButton, 0, 1)
 
-		self.settingsButton = QtGui.QPushButton("Settings")
+		self.settingsButton = QPushButton("Settings")
 		self.settingsButton.clicked.connect(self.on_settingsButton_clicked)
 		self.hbox.addWidget(self.settingsButton, 0, 2)
 
-		self.annotationsButton = QtGui.QPushButton("Annotations")
+		self.annotationsButton = QPushButton("Annotations")
 		self.annotationsButton.clicked.connect(self.on_annotationsButton_clicked)
 		self.hbox.addWidget(self.annotationsButton, 0, 3)
 
-		self.batchButton = QtGui.QPushButton("Batch File")
+		self.batchButton = QPushButton("Batch File")
 		self.batchButton.clicked.connect(self.on_batchButton_clicked)
 		self.hbox.addWidget(self.batchButton, 0, 4)
 
@@ -137,7 +137,7 @@ class ISTOCSY(QtGui.QWidget):
 				self.setMouseMode(self.RectMode)
 
 			def mouseClickEvent(self, ev):
-				if ev.button() == QtCore.Qt.LeftButton:
+				if ev.button() == Qt.LeftButton:
 					self.autoRange()
 
 		vb1 = CustomViewBox()
@@ -147,7 +147,7 @@ class ISTOCSY(QtGui.QWidget):
 		if (self.Attributes['MSdataPresent'] == True):
 
 			title1 = QLabel('LC-MS data')
-			title1.setAlignment(QtCore.Qt.AlignCenter)
+			title1.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 			self.hbox.addWidget(title1, row, 0, 1, 5)
 
 			self.plotwidget1 = pg.PlotWidget(viewBox=vb1)
@@ -167,7 +167,7 @@ class ISTOCSY(QtGui.QWidget):
 		if (self.Attributes['NMRdataPresent'] == True):
 
 			title2 = QLabel('NMR data')
-			title2.setAlignment(QtCore.Qt.AlignCenter)
+			title2.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 			self.hbox.addWidget(title2, row, 0, 1, 5)
 
 			self.plotwidget2 = pg.PlotWidget(viewBox=vb2)
@@ -190,7 +190,7 @@ class ISTOCSY(QtGui.QWidget):
 		if (self.Attributes['TargetedDataPresent'] == True):
 
 			title3 = QLabel('Targeted data')
-			title3.setAlignment(QtCore.Qt.AlignCenter)
+			title3.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 			self.hbox.addWidget(title3, row, 0, 1, 5)
 
 			self.plotwidget3 = pg.PlotWidget(viewBox=vb3)
@@ -206,23 +206,23 @@ class ISTOCSY(QtGui.QWidget):
 
 			row=row+2
 
-		self.setDriverButton = QtGui.QPushButton("Set driver")
+		self.setDriverButton = QPushButton("Set driver")
 		self.setDriverButton.clicked.connect(self.on_setDriver_clicked)
 		self.hbox.addWidget(self.setDriverButton, row, 0, 1, 3)
 
-		self.setDriverPairButton = QtGui.QPushButton("Set driver-pair")
+		self.setDriverPairButton = QPushButton("Set driver-pair")
 		self.setDriverPairButton.clicked.connect(self.on_setDriverPair_clicked)
 		self.hbox.addWidget(self.setDriverPairButton, row, 3, 1, 2)
 
-		self.showAllFeaturesButton = QtGui.QPushButton("Show features above threshold only")
+		self.showAllFeaturesButton = QPushButton("Show features above threshold only")
 		self.showAllFeaturesButton.clicked[bool].connect(self.on_showAllFeaturesButton_clicked)
 		self.hbox.addWidget(self.showAllFeaturesButton, row+1, 0, 1, 5)
 
-		self.applyRANSACButton = QtGui.QPushButton("Apply RANSAC")
+		self.applyRANSACButton = QPushButton("Apply RANSAC")
 		self.applyRANSACButton.clicked[bool].connect(self.on_applyRANSACButton_clicked)
 		self.hbox.addWidget(self.applyRANSACButton, row+2, 0, 1, 5)
 		
-		self.exportButton = QtGui.QPushButton("Export")
+		self.exportButton = QPushButton("Export")
 		self.exportButton.clicked.connect(self.on_exportButton_clicked)
 		self.hbox.addWidget(self.exportButton, row+3, 0, 1, 5)
 
@@ -231,23 +231,23 @@ class ISTOCSY(QtGui.QWidget):
 		self.displayPlotsText = QLabel('Display and export interactive plots: ')
 		self.hbox.addWidget(self.displayPlotsText, row+4, 0)
 
-		self.plotCorrelationButton = QtGui.QPushButton("Coloured by correlation to driver")
+		self.plotCorrelationButton = QPushButton("Coloured by correlation to driver")
 		self.plotCorrelationButton.clicked.connect(self.on_displayCorPlot_clicked)
 		self.hbox.addWidget(self.plotCorrelationButton, row+4, 1)
 
-		self.plotSetButton = QtGui.QPushButton("Coloured by structural set")
+		self.plotSetButton = QPushButton("Coloured by structural set")
 		self.plotSetButton.clicked.connect(self.on_displaySetsPlot_clicked)
 		self.hbox.addWidget(self.plotSetButton, row+4, 2)
 
-		self.plotHeatmapButton = QtGui.QPushButton("Heatmap of correlations")
+		self.plotHeatmapButton = QPushButton("Heatmap of correlations")
 		self.plotHeatmapButton.clicked.connect(self.on_displayCorMap_clicked)
 		self.hbox.addWidget(self.plotHeatmapButton, row+4, 3)
 
-		self.plotScatterButton = QtGui.QPushButton("Scatter plot of correlating features")
+		self.plotScatterButton = QPushButton("Scatter plot of correlating features")
 		self.plotScatterButton.clicked.connect(self.on_displayCorScatter_clicked)
 		self.hbox.addWidget(self.plotScatterButton, row+4, 4)
 				
-		self.resetButton = QtGui.QPushButton("Reset")
+		self.resetButton = QPushButton("Reset")
 		self.resetButton.clicked.connect(self.on_resetButton_clicked)
 		self.hbox.addWidget(self.resetButton, row+5, 0, 1, 5)
 
@@ -927,7 +927,7 @@ class ISTOCSY(QtGui.QWidget):
 
 def main(**kwargs):
 
-	app = QtGui.QApplication(sys.argv)
+	app = QApplication(sys.argv)
 	app.setApplicationName('ISTOCSY')
 	app.aboutToQuit.connect(app.deleteLater)
 	myapp = ISTOCSY(**kwargs)

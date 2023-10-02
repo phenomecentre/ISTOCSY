@@ -7,9 +7,10 @@ Created on Mon Jan 13 17:10:24 2020
 """
 
 
-import sip
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QLabel, QDialog, QFileDialog
+from PyQt6 import sip
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QInputDialog, QWidget, QApplication, QPushButton, QGridLayout
+from PyQt6.QtWidgets import QLabel, QDialog, QFileDialog
 import pyqtgraph as pg
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -47,7 +48,7 @@ class _batchDialog(QDialog):
 			self.setWindowTitle('Load/run Batch file')
 			self.setGeometry(10, 10, 500, 300)
 
-		self.hbox = QtGui.QGridLayout()
+		self.hbox = QGridLayout()
 		self.setLayout(self.hbox)
 
 		# Display batch file
@@ -55,13 +56,13 @@ class _batchDialog(QDialog):
 		self.hbox.addWidget(self.batchFileText, 1, 0)
 
 		# Update annotations file
-		self.batchFileButton = QtGui.QPushButton("Load new batch file")
-		self.batchFileButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.batchFileButton = QPushButton("Load new batch file")
+		self.batchFileButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.batchFileButton.clicked.connect(self.on_batchFileButton_clicked)
 		self.hbox.addWidget(self.batchFileButton, 1, 1)
 
 		# Match annotations file to dataset
-		self.closeButton = QtGui.QPushButton("Run ISTOCSY from batch file (if dataset loaded) and close")
+		self.closeButton = QPushButton("Run ISTOCSY from batch file (if dataset loaded) and close")
 		self.closeButton.clicked.connect(self.on_closeButton_clicked)
 		self.hbox.addWidget(self.closeButton, 2, 1)
 
@@ -69,7 +70,7 @@ class _batchDialog(QDialog):
 	def getResults(self):
 		""" Return results """
 		
-		if self.exec_() == QDialog.Accepted:
+		if self.exec() == QDialog.DialogCode.Accepted:
 
 			return self.Attributes
 

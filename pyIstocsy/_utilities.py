@@ -14,9 +14,9 @@ import pandas
 from scipy.stats import pearsonr, spearmanr, kendalltau
 import networkx as nx
 import warnings
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import QSizeF
-from PyQt5.QtPrintSupport import QPrinter
+from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtCore import QSizeF
+from PyQt6.QtPrintSupport import QPrinter
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import (LinearRegression, RANSACRegressor)
 
@@ -529,7 +529,7 @@ def _displayMessage(messageText):
 
 	message = QMessageBox()
 	message.setText(messageText)
-	message.exec_()
+	message.exec()
 
 
 def _writeOutput(self, mask, unittest=False):
