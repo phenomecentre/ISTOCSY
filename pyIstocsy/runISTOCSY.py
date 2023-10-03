@@ -929,10 +929,8 @@ def main(**kwargs):
 
 	app = QApplication(sys.argv)
 	app.setApplicationName('ISTOCSY')
-	app.aboutToQuit.connect(app.deleteLater)
 	myapp = ISTOCSY(**kwargs)
 	myapp.show()
-
 	app.exec()
 
 
