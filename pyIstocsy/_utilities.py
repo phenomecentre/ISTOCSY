@@ -50,11 +50,19 @@ def _loadDataset(self, intensityDataFile=None, featureMetadataFile=None, sampleM
 
 		# Load into dataset object
 		self.dataset.intensityData = intensityData
-		#self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, ignore_index=True, sort=False)
-		self.dataset.featureMetadata = pandas.concat([self.dataset.featureMetadata, featureMetadata], ignore_index=True, sort=False)
 
-		#self.dataset.sampleMetadata = self.dataset.sampleMetadata.append(sampleMetadata, ignore_index=True, sort=False)
-		self.dataset.sampleMetadata = pandas.concat([self.dataset.sampleMetadata, sampleMetadata], ignore_index=True, sort=False)
+		if self.dataset.featureMetadata.empty:
+
+			self.dataset.featureMetadata = featureMetadata
+		else:
+			self.dataset.featureMetadata = pandas.concat([self.dataset.featureMetadata, featureMetadata], ignore_index=True, sort=False)
+			#self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, ignore_index=True, sort=False)
+
+		if self.dataset.sampleMetadata.empty:
+			self.dataset.sampleMetadata = sampleMetadata
+		else:
+			#self.dataset.sampleMetadata = self.dataset.sampleMetadata.append(sampleMetadata, ignore_index=True, sort=False)
+			self.dataset.sampleMetadata = pandas.concat([self.dataset.sampleMetadata, sampleMetadata], ignore_index=True, sort=False)
 
 	# Else, match new data into existing (on Sample ID)
 	else:
