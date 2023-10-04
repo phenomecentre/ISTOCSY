@@ -535,10 +535,12 @@ class ISTOCSY(QWidget):
 		self.resetPlot()
 
 
+
+
+
 	def on_exportButton_clicked(self):
 		""" Correlating features button click - save feature list to csv """
-
-		if 'dataset' in self.Attributes:
+		if hasattr(self, 'dataset'):
 
 			if 'driver' in self.Attributes:
 
