@@ -8,7 +8,8 @@ Created on Fri Jan 10 17:52:22 2020
 
 from PyQt6 import sip
 import os
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSizeF
+from PyQt6.QtGui import QPageSize
 from PyQt6.QtWidgets import QInputDialog, QWidget, QApplication, QPushButton, QGridLayout
 
 from PyQt6.QtWidgets import QLabel, QInputDialog, QDialog, QFileDialog
@@ -16,7 +17,6 @@ import pyqtgraph as pg
 from _utilities import _displayMessage
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
-from PyQt6.QtCore import QSizeF
 from PyQt6.QtPrintSupport import QPrinter
 
 class _settingsDialog(QDialog):
@@ -395,11 +395,13 @@ class _settingsDialog(QDialog):
 		""" Export all settings as screenshot """
 		
         # Export screenshot
-		printer = QPrinter(QPrinter.HighResolution)
+		printer = QPrinter(QPrinter.PrinterMode.HighResolution)
 		printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], 'ISTOCSY_settings.pdf'))
-		printer.setOutputFormat(QPrinter.PdfFormat)
+		printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
 		size = self.size()
-		printer.setPaperSize(QSizeF(size.width(), size.height()), QPrinter.DevicePixel) # QPrinter.DevicePixel
+		#printer.setPageSize(QSizeF(size.width(), size.height()), QPrinter.Unit.DevicePixel) # QPrinter.DevicePixel
+
+		printer.setPaperSize(QPageSize(QSizeF(size.width(), size.height()), QPrinter.Unit.DevicePixel)) # QPrinter.DevicePixel
 		printer.setFullPage(True)
 		self.render(printer)
 
