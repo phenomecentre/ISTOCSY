@@ -5,11 +5,10 @@ statsmodels
 setuptools
 matplotlib
 networkx
+ipython
 plotly
+PyQt6
 pyqtgraph
 scipy
-PyQt6
-ipython
 scikit-learn
-jupyter
 
