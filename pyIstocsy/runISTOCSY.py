@@ -563,7 +563,7 @@ class ISTOCSY(QWidget):
 
 				_displayMessage("Driver must be set before results can be exported!!")
 		else:
-			_displayMessage("Load a dataset before setting the driver")
+			_displayMessage("Load a dataset before exporting.")
 
 
 	def on_showAllFeaturesButton_clicked(self):
