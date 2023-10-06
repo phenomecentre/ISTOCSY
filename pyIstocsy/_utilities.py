@@ -164,7 +164,7 @@ def _importAndCheckData(intensityDataFile, featureMetadataFile, sampleMetadataFi
 	# Append dataset name to 'Sample File Name'
 	sampleMetadata['Sample File Name'] = datasetName + '_' + sampleMetadata['Sample File Name']
 
-	return intensityData	, featureMetadata, sampleMetadata
+	return intensityData, featureMetadata, sampleMetadata
 
 
 def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
@@ -480,6 +480,7 @@ def _findStructuralSets(self):
 	C = _calcCorrelation(self.dataset.intensityData[:,self.dataset.featureMetadata['Feature Mask']], correlationMethod=self.Attributes['correlationMethod'])
 
 	# Calculate difference in RT
+	print(featureTable.columns.values)
 	RT = np.expand_dims(featureTable['Retention Time'].values, axis=1)
 	RT = np.tile(RT, featureTable.shape[0])
 	R = np.abs(RT - np.transpose(RT))

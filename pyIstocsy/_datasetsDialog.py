@@ -109,12 +109,13 @@ class _datasetsDialog(QDialog):
 			self.hbox.addWidget(QLabel('Details of existing datasets: '), row, 0)
 
 			for dataset in self.Attributes['datasetsDetails']:
-                
+
 				self.hbox.addWidget(QLabel(dataset[0]), row+1, 0)
 				self.hbox.addWidget(QLabel('Data type: ' + dataset[1]), row+1, 1)
 				self.hbox.addWidget(QLabel('intensityData path: ' + dataset[2]), row+2, 1)
-				self.hbox.addWidget(QLabel('sampleMetadata path: ' + dataset[3]), row+3, 1)
-				self.hbox.addWidget(QLabel('featureMetadata path: ' + dataset[4]), row+4, 1)
+				self.hbox.addWidget(QLabel('featureMetadata path: ' + dataset[3]), row + 3, 1)
+				self.hbox.addWidget(QLabel('sampleMetadata path: ' + dataset[4]), row+4, 1)
+
 				self.hbox.addWidget(QLabel('Number of samples: ' + str(dataset[5])), row+5, 1)
 				self.hbox.addWidget(QLabel('Number of features: ' + str(dataset[6])), row+6, 1)
                 

@@ -621,6 +621,7 @@ class ISTOCSY(QWidget):
 
 			# Action!
 
+
 			if results['action'] == 'loadDataset':
 
 				self.Attributes['datasetsDetails'].append(results['datasetDetails'])
@@ -825,23 +826,25 @@ class ISTOCSY(QWidget):
 			x, ok = QInputDialog.getText(self, '', 'Enter ''Feature Name'' of driver:')
 
 			# Check that driver is in dataset
-
-			featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
 			print("feature = %s" % x)
-			print(self.dataset.featureMetadata[['Feature Name']])
+			print("ok = %s" % ok)
+			if ok: # user clicked on 'cancel' so do nothing
+					featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
 
-			try:
-				temp = featureix.values
-				self.Attributes['driver'] = temp[0]
-				self.Attributes['saveName'] = self.dataset.featureMetadata.loc[self.Attributes['driver'],'Feature Name'].replace('/','')
-				self.Attributes['recalculateCorrelation'] = True
+					#print(self.dataset.featureMetadata[['Feature Name']])
 
-				# Check if changed and action result of change
-				self.updatePlot()
+					try:
+						temp = featureix.values
+						self.Attributes['driver'] = temp[0]
+						self.Attributes['saveName'] = self.dataset.featureMetadata.loc[self.Attributes['driver'],'Feature Name'].replace('/','')
+						self.Attributes['recalculateCorrelation'] = True
 
-			except:
-				_displayMessage("Driver must match an entry in the ''Feature Name'' column of the feature metadata file")
-				self.resetPlot()
+						# Check if changed and action result of change
+						self.updatePlot()
+
+					except:
+						_displayMessage("Driver must match an entry in the ''Feature Name'' column of the feature metadata file")
+						self.resetPlot()
 		else:
 			_displayMessage("Load a dataset before setting the driver!")
 
@@ -851,28 +854,29 @@ class ISTOCSY(QWidget):
 		if hasattr(self, 'dataset'):
 			x, ok = QInputDialog.getText(self, '', 'Enter ''Feature Name'' of driver pair:')
 
-			# Check that driver is in dataset
-			featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
+			if ok:
+				# Check that driver is in dataset
+				featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
 
-			try:
-				temp = featureix.values
-				self.Attributes['driverPair'] = temp[0]
+				try:
+					temp = featureix.values
+					self.Attributes['driverPair'] = temp[0]
 
-			except:
+				except:
 
-				_displayMessage("Driver Pair must match an entry in the ''Feature Name'' column of the feature metadata file")
-				self.resetPlot()
+					_displayMessage("Driver Pair must match an entry in the ''Feature Name'' column of the feature metadata file")
+					self.resetPlot()
 
-			try:
+				try:
 
-				self.Attributes['saveName'] = self.dataset.featureMetadata.loc[self.Attributes['driver'],'Feature Name'].replace('/','') + ' correlation to ' + self.dataset.featureMetadata.loc[self.Attributes['driverPair'],'Feature Name'].replace('/','')
+					self.Attributes['saveName'] = self.dataset.featureMetadata.loc[self.Attributes['driver'],'Feature Name'].replace('/','') + ' correlation to ' + self.dataset.featureMetadata.loc[self.Attributes['driverPair'],'Feature Name'].replace('/','')
 
 
-			except:
-				_displayMessage("Driver must be set")
-				self.resetPlot()
-			# Update plot
-			self.updatePlot()
+				except:
+					_displayMessage("Driver must be set")
+					self.resetPlot()
+				# Update plot
+				self.updatePlot()
 		else:
 			_displayMessage("Load a dataset before setting the driver!")
 
