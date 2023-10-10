@@ -14,7 +14,7 @@ from PyQt6.QtWidgets import QInputDialog, QWidget, QApplication, QPushButton, QG
 
 from PyQt6.QtWidgets import QLabel, QInputDialog, QDialog, QFileDialog
 import pyqtgraph as pg
-from _utilities import _displayMessage
+from _utilities import _displayMessage, _getPrinter
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
 from PyQt6.QtPrintSupport import QPrinter
@@ -395,14 +395,16 @@ class _settingsDialog(QDialog):
 		""" Export all settings as screenshot """
 		
         # Export screenshot
-		printer = QPrinter(QPrinter.PrinterMode.HighResolution)
-		printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], 'ISTOCSY_settings.pdf'))
-		printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
-		size = self.size()
-		#printer.setPageSize(QSizeF(size.width(), size.height()), QPrinter.Unit.DevicePixel) # QPrinter.DevicePixel
+		savePath = os.path.join(self.Attributes['saveDir'], 'ISTOCSY_settings.pdf')
+		printer = _getPrinter(size=self.size(), savePath=savePath)
 
-		printer.setPaperSize(QPageSize(QSizeF(size.width(), size.height()), QPrinter.Unit.DevicePixel)) # QPrinter.DevicePixel
-		printer.setFullPage(True)
+		#printer = QPrinter(QPrinter.PrinterMode.HighResolution)
+		#printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], 'ISTOCSY_settings.pdf'))
+		#printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
+		#size = self.size()
+		#printer.setPageSize(QPageSize(QSizeF(size.width(), size.height()), QPrinter.Unit.DevicePixel)) # QPrinter.DevicePixel
+		#printer.setFullPage(True)
+
 		self.render(printer)
 
 		self.accept()

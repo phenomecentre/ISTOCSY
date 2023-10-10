@@ -10,9 +10,10 @@ from PyQt6 import sip
 import os
 from functools import partial
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPageSize
 from PyQt6.QtWidgets import QFileDialog, QInputDialog, QDialog, QLabel
 from PyQt6.QtWidgets import QWidget, QApplication, QPushButton, QGridLayout
-
+from _utilities import _getPrinter
 import pyqtgraph as pg
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -237,14 +238,8 @@ class _datasetsDialog(QDialog):
 		
         # Flat to export ISTOCSY dataset
 		self.Attributes['action'] = 'exportDataset'
-        
-        # Export screenshot
-		printer = QPrinter(QPrinter.HighResolution)
-		printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], 'ISTOCSY_dataset_details.pdf'))
-		printer.setOutputFormat(QPrinter.PdfFormat)
-		size = self.size()
-		printer.setPaperSize(QSizeF(size.width(), size.height()), QPrinter.DevicePixel) # QPrinter.DevicePixel
-		printer.setFullPage(True)
+		savePath = os.path.join(self.Attributes['saveDir'], 'ISTOCSY_dataset_details.pdf')
+		printer = _getPrinter(size=self.size(), savePath=savePath)
 		self.render(printer)        
                 
 		self.accept()

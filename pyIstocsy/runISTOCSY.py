@@ -831,7 +831,7 @@ class ISTOCSY(QWidget):
 			if ok: # user clicked on 'cancel' so do nothing
 					featureix = self.dataset.featureMetadata.index[self.dataset.featureMetadata['Feature Name'] == x]
 
-					#print(self.dataset.featureMetadata[['Feature Name']])
+					print(self.dataset.featureMetadata.loc[0, 'Feature Name'])
 
 					try:
 						temp = featureix.values
