@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 echo "=== Making Python3 environment ==="
 python3 -m venv istocsy-env
