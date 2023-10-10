@@ -1,6 +1,6 @@
 # ISTOCSY
 
-* Version 2.0.0
+* Version 3.0.0
 
 ISTOCSY is a python library for interactively exploring the correlations between features in metabolomics datasets
 
@@ -20,18 +20,19 @@ Exports:
 
 ## Installation
 
-Download or clone ISTOCSY repo, then from inside Python run:
+Download and unzip ISTOCSY code from Git:
+https://github.com/phenomecentre/ISTOCSY/archive/refs/heads/pyqt6.zip
 
-    import sys
-	sys.path.append('path to saved ISTOCSY code')
-	import runISTOCSY
-	runISTOCSY.main()
+### Windows
 
-## Documentation
 
-See 'Example input data' files for examples of required format.
-Documentation in progress - watch this space!
+In a PowerShell terminal window, cd to the unzipped directory and run the batch file
+called install_and_run_istocsy.bat
 
-## Testing
+### Mac
 
-Unit testing code in progress - watch this space!
+
+In a terminal window, cd to the unzipped directory and run the batch file
+called install_and_run_istocsy.sh
+
+
