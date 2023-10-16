@@ -202,7 +202,7 @@ def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
 		featureMetadata['Targeted Feature Number'] = featureMetadata['Targeted Feature Number'] + tfn_ix
 
 	# Create merged list of all sample IDs
-	sampleIDs_all = np.unique(self.dataset.sampleMetadata['Sample ID'].append(sampleMetadata['Sample ID']))
+	sampleIDs_all = np.unique(pandas.concat([self.dataset.sampleMetadata['Sample ID'], sampleMetadata['Sample ID']]))
 
 	for sampleID in sampleIDs_all:
 		ix1 = self.dataset.sampleMetadata[sampleID == self.dataset.sampleMetadata['Sample ID']].index
@@ -224,7 +224,7 @@ def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
 	self.dataset.sampleMetadata['Sample File Name'] = self.dataset.sampleMetadata['Sample File Name'] + ';' + sampleMetadata['Sample File Name']
 
 	# Append new featureMetadata
-	self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, sort=False)
+	self.dataset.featureMetadata = pandas.concat([self.dataset.featureMetadata, featureMetadata], sort=False)
 	self.dataset.featureMetadata.reset_index(drop=True, inplace=True)
 
 	# Overwrite intensityData
@@ -294,7 +294,7 @@ def _loadAnnotations(self):
 
 		self.annotationData = pandas.DataFrame(None, columns=['Annotation', 'Retention Time', 'm/z', 'ppm'])
 
-	self.annotationData = self.annotationData.append(annotationData, sort=False)
+	self.annotationData = pandas.concat([self.annotationData, annotationData], sort=False)
 
 	self.annotationData.reset_index(drop=True, inplace=True)
 
