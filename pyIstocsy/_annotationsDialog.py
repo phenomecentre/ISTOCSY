@@ -6,9 +6,10 @@ Created on Mon Jan 13 17:10:24 2020
 @author: cs401
 """
 
-import sip
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QLabel, QDialog, QFileDialog
+from PyQt6 import sip
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QInputDialog, QWidget, QApplication, QPushButton, QGridLayout
+from PyQt6.QtWidgets import QLabel, QDialog, QFileDialog
 import pyqtgraph as pg
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -46,7 +47,7 @@ class _annotationsDialog(QDialog):
 			self.setWindowTitle('Load/match Annotations')
 			self.setGeometry(10, 10, 500, 300)
 
-		self.hbox = QtGui.QGridLayout()
+		self.hbox = QGridLayout()
 		self.setLayout(self.hbox)
 
 		# Display annotations file
@@ -54,13 +55,13 @@ class _annotationsDialog(QDialog):
 		self.hbox.addWidget(self.annotationFileText, 1, 0)
 
 		# Update annotations file
-		self.annotationFileButton = QtGui.QPushButton("Load new annotations file")
-		self.annotationFileButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.annotationFileButton = QPushButton("Load new annotations file")
+		self.annotationFileButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.annotationFileButton.clicked.connect(self.on_annotationFileButton_clicked)
 		self.hbox.addWidget(self.annotationFileButton, 1, 1)
 
 		# Match annotations file to dataset
-		self.closeButton = QtGui.QPushButton("Match to ISTOCSY dataset (if available) and close")
+		self.closeButton = QPushButton("Match to ISTOCSY dataset (if available) and close")
 		self.closeButton.clicked.connect(self.on_closeButton_clicked)
 		self.hbox.addWidget(self.closeButton, 2, 1)
 
@@ -68,7 +69,7 @@ class _annotationsDialog(QDialog):
 	def getResults(self):
 		""" Return results """
 		
-		if self.exec_() == QDialog.Accepted:
+		if self.exec() == QDialog.DialogCode.Accepted:
 
 			return self.Attributes
 

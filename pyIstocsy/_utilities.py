@@ -11,12 +11,14 @@ Created on Fri Apr  6 11:32:54 2018
 import os
 import numpy as np
 import pandas
+
 from scipy.stats import pearsonr, spearmanr, kendalltau
 import networkx as nx
 import warnings
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import QSizeF
-from PyQt5.QtPrintSupport import QPrinter
+from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtCore import QSizeF
+from PyQt6.QtGui import QPageSize
+from PyQt6.QtPrintSupport import QPrinter
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import (LinearRegression, RANSACRegressor)
 
@@ -35,6 +37,9 @@ def _loadDataset(self, intensityDataFile=None, featureMetadataFile=None, sampleM
 	self.Attributes['datasetsDetails'][-1].append(intensityData.shape[0])
 	self.Attributes['datasetsDetails'][-1].append(intensityData.shape[1])
 
+	featureColumns = ['Dataset Name', 'Data Type', 'Feature Name', 'Feature Name Original', 'Retention Time', 'm/z', 'ppm', 'Targeted Feature Number', 'Median Intensity Scaled']
+	sampleColumns = ['Sample ID', 'Sample File Name']
+
 	# If this is the first dataset loaded
 	if not hasattr(self, 'dataset'):
 
@@ -43,15 +48,34 @@ def _loadDataset(self, intensityDataFile=None, featureMetadataFile=None, sampleM
 
 			def __init__(self):
 				self.intensityData = np.array(None)
-				self.featureMetadata = pandas.DataFrame(None, columns=['Dataset Name', 'Data Type', 'Feature Name', 'Feature Name Original', 'Retention Time', 'm/z', 'ppm', 'Targeted Feature Number', 'Median Intensity Scaled'])
-				self.sampleMetadata = pandas.DataFrame(None, columns=['Sample ID', 'Sample File Name'])
+				self.featureMetadata = pandas.DataFrame(None, columns=featureColumns)
+				self.sampleMetadata = pandas.DataFrame(None, columns=sampleColumns)
 
 		self.dataset = Dataset()
 
 		# Load into dataset object
 		self.dataset.intensityData = intensityData
-		self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, ignore_index=True, sort=False)
-		self.dataset.sampleMetadata = self.dataset.sampleMetadata.append(sampleMetadata, ignore_index=True, sort=False)
+		# append is deprecated so use concat below; need to fiddle a bit to avoid warning about appending empty dataframes
+		# self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, ignore_index=True, sort=False)
+		# self.dataset.sampleMetadata = self.dataset.sampleMetadata.append(sampleMetadata, ignore_index=True, sort=False)
+
+		if self.dataset.featureMetadata.empty:
+
+			self.dataset.featureMetadata = featureMetadata
+			# add the extra columns that are missing
+			new_list = list(set(self.dataset.featureMetadata.columns).union(featureColumns))
+			print(new_list)
+			self.dataset.featureMetadata = self.dataset.featureMetadata.reindex(columns=sorted(new_list)).fillna(0)
+		else:
+			self.dataset.featureMetadata = pandas.concat([self.dataset.featureMetadata, featureMetadata], ignore_index=True, sort=False)
+
+		if self.dataset.sampleMetadata.empty:
+			self.dataset.sampleMetadata = sampleMetadata
+			new_list = list(set(self.dataset.sampleMetadata.columns).union(sampleColumns))
+			print(new_list)
+			self.dataset.sampleMetadata = self.dataset.sampleMetadata.reindex(columns=sorted(new_list)).fillna(0)
+		else:
+			self.dataset.sampleMetadata = pandas.concat([self.dataset.sampleMetadata, sampleMetadata], ignore_index=True, sort=False)
 
 	# Else, match new data into existing (on Sample ID)
 	else:
@@ -152,7 +176,7 @@ def _importAndCheckData(intensityDataFile, featureMetadataFile, sampleMetadataFi
 	# Append dataset name to 'Sample File Name'
 	sampleMetadata['Sample File Name'] = datasetName + '_' + sampleMetadata['Sample File Name']
 
-	return intensityData	, featureMetadata, sampleMetadata
+	return intensityData, featureMetadata, sampleMetadata
 
 
 def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
@@ -178,7 +202,7 @@ def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
 		featureMetadata['Targeted Feature Number'] = featureMetadata['Targeted Feature Number'] + tfn_ix
 
 	# Create merged list of all sample IDs
-	sampleIDs_all = np.unique(self.dataset.sampleMetadata['Sample ID'].append(sampleMetadata['Sample ID']))
+	sampleIDs_all = np.unique(pandas.concat([self.dataset.sampleMetadata['Sample ID'], sampleMetadata['Sample ID']]))
 
 	for sampleID in sampleIDs_all:
 		ix1 = self.dataset.sampleMetadata[sampleID == self.dataset.sampleMetadata['Sample ID']].index
@@ -200,7 +224,7 @@ def _matchDatasets(self, intensityData, featureMetadata, sampleMetadata):
 	self.dataset.sampleMetadata['Sample File Name'] = self.dataset.sampleMetadata['Sample File Name'] + ';' + sampleMetadata['Sample File Name']
 
 	# Append new featureMetadata
-	self.dataset.featureMetadata = self.dataset.featureMetadata.append(featureMetadata, sort=False)
+	self.dataset.featureMetadata = pandas.concat([self.dataset.featureMetadata, featureMetadata], sort=False)
 	self.dataset.featureMetadata.reset_index(drop=True, inplace=True)
 
 	# Overwrite intensityData
@@ -270,7 +294,7 @@ def _loadAnnotations(self):
 
 		self.annotationData = pandas.DataFrame(None, columns=['Annotation', 'Retention Time', 'm/z', 'ppm'])
 
-	self.annotationData = self.annotationData.append(annotationData, sort=False)
+	self.annotationData = pandas.concat([self.annotationData, annotationData], sort=False)
 
 	self.annotationData.reset_index(drop=True, inplace=True)
 
@@ -468,6 +492,7 @@ def _findStructuralSets(self):
 	C = _calcCorrelation(self.dataset.intensityData[:,self.dataset.featureMetadata['Feature Mask']], correlationMethod=self.Attributes['correlationMethod'])
 
 	# Calculate difference in RT
+	print(featureTable.columns.values)
 	RT = np.expand_dims(featureTable['Retention Time'].values, axis=1)
 	RT = np.tile(RT, featureTable.shape[0])
 	R = np.abs(RT - np.transpose(RT))
@@ -483,7 +508,8 @@ def _findStructuralSets(self):
 	O = Cpass & Rpass
 
 	# Cluster
-	G = nx.from_numpy_matrix(O)
+	#G = nx.from_numpy_matrix(O)  this has been deprecated in latest version; replacing with from_numpy_array
+	G = nx.from_numpy_array(O)
 	temp = list(nx.connected_components(G))
 
 	# Extract unique sets from clustering network
@@ -529,7 +555,7 @@ def _displayMessage(messageText):
 
 	message = QMessageBox()
 	message.setText(messageText)
-	message.exec_()
+	message.exec()
 
 
 def _writeOutput(self, mask, unittest=False):
@@ -548,12 +574,7 @@ def _writeOutput(self, mask, unittest=False):
 
 	# Save screen shot of app (falls over in testing so only when running for real)
 	if unittest is False:
-		printer = QPrinter(QPrinter.HighResolution)
-		printer.setOutputFileName(savePath + '_screenshot.pdf')
-		printer.setOutputFormat(QPrinter.PdfFormat)
-		size = self.size()
-		printer.setPaperSize(QSizeF(size.width(), size.height()), QPrinter.DevicePixel) # QPrinter.DevicePixel
-		printer.setFullPage(True)
+		printer = _getPrinter(size=self.size(), savePath=savePath + '_screenshot.pdf')
 		self.render(printer)
 
 	# Export RANSAC outliers
@@ -561,6 +582,16 @@ def _writeOutput(self, mask, unittest=False):
 
 		self.RANSAC['outliers'].to_csv(savePath.replace('_allFeatures', '') + '_RANSACoutliers.csv', encoding='utf-8')
 
+def _getPrinter(size, savePath):
+	printer = QPrinter(QPrinter.PrinterMode.HighResolution)
+	printer.setOutputFileName(savePath )
+	printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
+
+	s = QSizeF(size.width(), size.height())
+	page = QPageSize(s, QPageSize.Unit.Point, '')
+	printer.setPageSize(page)
+	printer.setFullPage(True)
+	return printer
 
 def _writeData(self):
 	""" Export full ISTOCSY dataset """

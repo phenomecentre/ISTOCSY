@@ -1,0 +1,8 @@
+*.pdf
+*.html
+.ipynb_checkpoints/
+.DS_Store
+Example Data/
+.idea/
+.idea/other.xml
+**/__pycache__/

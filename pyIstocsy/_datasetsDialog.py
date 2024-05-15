@@ -6,16 +6,19 @@ Created on Fri Jan 10 16:53:11 2020
 @author: cs401
 """
 
-import sip
+from PyQt6 import sip
 import os
 from functools import partial
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog, QInputDialog, QDialog, QLabel
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPageSize
+from PyQt6.QtWidgets import QFileDialog, QInputDialog, QDialog, QLabel
+from PyQt6.QtWidgets import QWidget, QApplication, QPushButton, QGridLayout
+from _utilities import _getPrinter
 import pyqtgraph as pg
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
-from PyQt5.QtCore import QSizeF
-from PyQt5.QtPrintSupport import QPrinter
+from PyQt6.QtCore import QSizeF
+from PyQt6.QtPrintSupport import QPrinter
 
 class _datasetsDialog(QDialog):
 
@@ -62,40 +65,40 @@ class _datasetsDialog(QDialog):
 			self.setWindowTitle('Import Data')
 			self.setGeometry(10, 10, 500, 300)
 
-		self.hbox = QtGui.QGridLayout()
+		self.hbox = QGridLayout()
 		self.setLayout(self.hbox)
         
   		# Load new dataset      
 		self.newDatasetText = QLabel('Load new dataset: ')
 		self.hbox.addWidget(self.newDatasetText, 1, 0)
         
-		self.nameButton = QtGui.QPushButton("Enter dataset name")
-		self.nameButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.nameButton = QPushButton("Enter dataset name")
+		self.nameButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.nameButton.clicked.connect(self.on_setDatasetName_clicked)
 		self.hbox.addWidget(self.nameButton, 1, 1)
 
-		self.typeButton = QtGui.QPushButton("Enter dataset type")
-		self.typeButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.typeButton = QPushButton("Enter dataset type")
+		self.typeButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.typeButton.clicked.connect(self.on_setDatasetType_clicked)
 		self.hbox.addWidget(self.typeButton, 2, 1)
 
-		self.intensityButton = QtGui.QPushButton("Enter path to intensity data file")
-		self.intensityButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.intensityButton = QPushButton("Enter path to intensity data file")
+		self.intensityButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.intensityButton.clicked.connect(self.on_setIntensityData_clicked)
 		self.hbox.addWidget(self.intensityButton, 3, 1)
 
-		self.sampledataButton = QtGui.QPushButton("Enter path to sample metadata file")
-		self.sampledataButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.sampledataButton = QPushButton("Enter path to sample metadata file")
+		self.sampledataButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.sampledataButton.clicked.connect(self.on_setSampleMetadata_clicked)
 		self.hbox.addWidget(self.sampledataButton, 4, 1)
 
-		self.featuredataButton = QtGui.QPushButton("Enter path to feature metadata file")
-		self.featuredataButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.featuredataButton = QPushButton("Enter path to feature metadata file")
+		self.featuredataButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.featuredataButton.clicked.connect(self.on_setFeatureMetadata_clicked)
 		self.hbox.addWidget(self.featuredataButton, 5, 1)
 
-		self.closeButton = QtGui.QPushButton("Import new dataset and close")
-		self.closeButton.setFocusPolicy(QtCore.Qt.NoFocus)
+		self.closeButton = QPushButton("Import new dataset and close")
+		self.closeButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 		self.closeButton.clicked.connect(self.on_closeButton_clicked)
 		self.hbox.addWidget(self.closeButton, 6, 1)
 
@@ -107,18 +110,19 @@ class _datasetsDialog(QDialog):
 			self.hbox.addWidget(QLabel('Details of existing datasets: '), row, 0)
 
 			for dataset in self.Attributes['datasetsDetails']:
-                
+
 				self.hbox.addWidget(QLabel(dataset[0]), row+1, 0)
 				self.hbox.addWidget(QLabel('Data type: ' + dataset[1]), row+1, 1)
 				self.hbox.addWidget(QLabel('intensityData path: ' + dataset[2]), row+2, 1)
-				self.hbox.addWidget(QLabel('sampleMetadata path: ' + dataset[3]), row+3, 1)
-				self.hbox.addWidget(QLabel('featureMetadata path: ' + dataset[4]), row+4, 1)
+				self.hbox.addWidget(QLabel('featureMetadata path: ' + dataset[3]), row + 3, 1)
+				self.hbox.addWidget(QLabel('sampleMetadata path: ' + dataset[4]), row+4, 1)
+
 				self.hbox.addWidget(QLabel('Number of samples: ' + str(dataset[5])), row+5, 1)
 				self.hbox.addWidget(QLabel('Number of features: ' + str(dataset[6])), row+6, 1)
                 
 				# Add button to remove dataset
-				self.deleteDatasetButton = QtGui.QPushButton("Delete dataset and close")
-				self.deleteDatasetButton.setFocusPolicy(QtCore.Qt.NoFocus)
+				self.deleteDatasetButton = QPushButton("Delete dataset and close")
+				self.deleteDatasetButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 				self.deleteDatasetButton.clicked.connect(partial(self.on_deleteDatasetButton_clicked, dataset[0]))
 				self.hbox.addWidget(self.deleteDatasetButton, row+7, 1)
                 
@@ -133,8 +137,8 @@ class _datasetsDialog(QDialog):
 			self.hbox.addWidget(QLabel('Number of features: ' + str(self.Attributes['istocsyDatasetDetails'][1])), row+1, 1)
 
 			# Button to export ISTOCSY dataset
-			self.exportButton = QtGui.QPushButton("Export ISTOCSY dataset and close")
-			self.exportButton.setFocusPolicy(QtCore.Qt.NoFocus)
+			self.exportButton = QPushButton("Export ISTOCSY dataset and close")
+			self.exportButton.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 			self.exportButton.clicked.connect(self.on_exportButton_clicked)
 			self.hbox.addWidget(self.exportButton, row+2, 1)        
         
@@ -142,7 +146,7 @@ class _datasetsDialog(QDialog):
 	def getResults(self):
 		""" Return results """
 
-		if self.exec_() == QDialog.Accepted:
+		if self.exec() == QDialog.DialogCode.Accepted:
 
 			return self.Attributes
 
@@ -234,14 +238,8 @@ class _datasetsDialog(QDialog):
 		
         # Flat to export ISTOCSY dataset
 		self.Attributes['action'] = 'exportDataset'
-        
-        # Export screenshot
-		printer = QPrinter(QPrinter.HighResolution)
-		printer.setOutputFileName(os.path.join(self.Attributes['saveDir'], 'ISTOCSY_dataset_details.pdf'))
-		printer.setOutputFormat(QPrinter.PdfFormat)
-		size = self.size()
-		printer.setPaperSize(QSizeF(size.width(), size.height()), QPrinter.DevicePixel) # QPrinter.DevicePixel
-		printer.setFullPage(True)
+		savePath = os.path.join(self.Attributes['saveDir'], 'ISTOCSY_dataset_details.pdf')
+		printer = _getPrinter(size=self.size(), savePath=savePath)
 		self.render(printer)        
                 
 		self.accept()
