@@ -1,6 +1,6 @@
 # ISTOCSY
 
-* Version 3.0.0
+* Version 2.0.0
 
 ISTOCSY is a python library for interactively exploring the correlations between features in metabolomics datasets
 
