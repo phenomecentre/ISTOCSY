@@ -16,6 +16,7 @@ import webbrowser
 import os
 import textwrap
 from itertools import compress
+import copy
 
 def plotScatter(self, colourBy='Correlation', mask=None, savePath='plotScatter', autoOpen=True):
 	"""
@@ -50,7 +51,7 @@ def plotScatter(self, colourBy='Correlation', mask=None, savePath='plotScatter',
 		hovertext = ["%s; Cor: %.4f" % i for i in zip(featureTable['Feature Name'], featureTable['Correlation'])]
 		
 	# Universal settings
-	cVect = featureTable[colourBy].values
+	cVect = copy.deepcopy(featureTable[colourBy].values)
 	cVect[np.isnan(cVect)] = 0
 
 	if colourBy=='Correlation':
